@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 212 72% 22%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 187 72% 33%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 187 70% 56%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,24 +31,17 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 187 72% 33%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-background: 212 72% 22%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 187 72% 33%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
+    --sidebar-accent: 187 70% 56%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-border: 215 28% 17%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -97,5 +91,44 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .optimly-card {
+    @apply bg-white rounded-lg border border-gray-200 p-6 shadow-sm transition-all hover:shadow-md;
+  }
+  
+  .confidence-high {
+    @apply bg-green-100 text-green-800 border-green-200;
+  }
+  
+  .confidence-medium {
+    @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+  }
+  
+  .confidence-low {
+    @apply bg-red-100 text-red-800 border-red-200;
+  }
+  
+  .confidence-badge {
+    @apply px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .model-badge {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium mr-2;
+  }
+  
+  .chatgpt {
+    @apply bg-green-50 text-green-700 border border-green-200;
+  }
+  
+  .gemini {
+    @apply bg-blue-50 text-blue-700 border border-blue-200;
+  }
+  
+  .perplexity {
+    @apply bg-purple-50 text-purple-700 border border-purple-200;
   }
 }

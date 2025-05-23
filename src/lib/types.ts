@@ -1,0 +1,49 @@
+
+export type ModelType = 'chatgpt' | 'gemini' | 'perplexity';
+
+export type VisibilityStatus = 'high' | 'medium' | 'low' | 'absent';
+
+export type CitationType = 'inline' | 'link' | 'none';
+
+export interface ModelResult {
+  model: ModelType;
+  mentioned: boolean;
+  citationType: CitationType;
+  snippet: string;
+  confidenceScore: number;
+}
+
+export interface QueryResult {
+  id: string;
+  query: string;
+  persona: string;
+  topic: string;
+  results: ModelResult[];
+}
+
+export interface ContentVariant {
+  id: string;
+  content: string;
+  format: string;
+  topic: string;
+  persona: string;
+  query: string;
+}
+
+export interface SimulationResult {
+  id: string;
+  variantId: string;
+  model: ModelType;
+  brandCited: boolean;
+  snippet: string;
+  timestamp: string;
+  confidenceScore: number;
+  sentiment: 'positive' | 'neutral' | 'negative';
+  isControl?: boolean;
+}
+
+export interface Brand {
+  name: string;
+  industry: string;
+  competitors?: string[];
+}
