@@ -22,6 +22,7 @@ const Index = () => {
   const [personas, setPersonas] = useState<string[]>(getPersonasFromQueries(dummyQueries));
   const [variants, setVariants] = useState<ContentVariant[]>([]);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [showSuccessCard, setShowSuccessCard] = useState(false);
   
   // Simulate checking if user has completed onboarding
   useEffect(() => {
@@ -39,6 +40,7 @@ const Index = () => {
   const handleCompleteOnboarding = (newBrand: Brand) => {
     setBrand(newBrand);
     setOnboardingComplete(true);
+    setShowSuccessCard(true);
   };
   
   const handleUpdateBrand = (updatedBrand: Brand) => {
@@ -54,6 +56,15 @@ const Index = () => {
   const handleGenerateVariants = (newVariants: ContentVariant[], query: QueryResult) => {
     setVariants(prev => [...prev, ...newVariants]);
   };
+
+  const handleViewResults = () => {
+    setShowSuccessCard(false);
+    // Scroll to results section
+    const resultsSection = document.getElementById('query-results');
+    if (resultsSection) {
+      resultsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   if (!onboardingComplete && !brand) {
     return <OnboardingFlow onComplete={handleCompleteOnboarding} />;
@@ -68,6 +79,10 @@ const Index = () => {
             Track and improve your brand visibility across AI platforms
           </p>
         </div>
+
+        {showSuccessCard && (
+          <SuccessCard onViewResults={handleViewResults} />
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1">
@@ -88,7 +103,7 @@ const Index = () => {
           <TopicSummary topics={topics} queries={queries} />
         </div>
         
-        <div>
+        <div id="query-results">
           <h2 className="text-xl font-bold mb-4">Query Results</h2>
           <QueryResultsTable 
             queries={queries} 
