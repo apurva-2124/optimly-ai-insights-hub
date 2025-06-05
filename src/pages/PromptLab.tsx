@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MainDashboardLayout } from '@/components/layout/MainDashboardLayout';
 import { SimulationResults } from '@/components/promptlab/SimulationResults';
-import { StepIndicator } from '@/components/promptlab/StepIndicator';
-import { QueryInputStep } from '@/components/promptlab/QueryInputStep';
+import { StepIndicator } from '@/components/onboarding/StepIndicator';
+import { QuerySelectionStep } from '@/components/promptlab/QuerySelectionStep';
+import { ContextSummaryBar } from '@/components/promptlab/ContextSummaryBar';
 import { IntentDetectionStep } from '@/components/promptlab/IntentDetectionStep';
-import { LLMSimulationStep } from '@/components/promptlab/LLMSimulationStep';
+import { EnhancedSimulationStep } from '@/components/promptlab/EnhancedSimulationStep';
 import { ContentMatchStep } from '@/components/promptlab/ContentMatchStep';
-import { ModelSelectionStep } from '@/components/promptlab/ModelSelectionStep';
+import { EnhancedModelSelection } from '@/components/promptlab/EnhancedModelSelection';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { 
@@ -16,7 +17,7 @@ import {
   SimulationResult 
 } from '@/lib/types';
 import { dummySimulationResults } from '@/lib/dummy-data';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Database } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface IntentData {
@@ -30,27 +31,68 @@ interface MatchResult {
   explanation: string;
 }
 
+interface DiscoveryQuery {
+  id: string;
+  query: string;
+  topic: string;
+  persona: string;
+  funnelStage: string;
+}
+
 const PromptLab = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
   const [currentStep, setCurrentStep] = useState(1);
   const [query, setQuery] = useState('');
+  const [queryContext, setQueryContext] = useState({
+    topic: '',
+    persona: '',
+    funnelStage: ''
+  });
   const [intentData, setIntentData] = useState<IntentData | null>(null);
   const [simulatedResponse, setSimulatedResponse] = useState<string | null>(null);
+  const [brandMentioned, setBrandMentioned] = useState<boolean | null>(null);
+  const [matchScore, setMatchScore] = useState<number | null>(null);
+  const [personaFit, setPersonaFit] = useState<string | null>(null);
   const [brandContent, setBrandContent] = useState('');
   const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
-  const [selectedModels, setSelectedModels] = useState<string[]>(['chatgpt']);
+  const [selectedModels, setSelectedModels] = useState<string[]>(['chatgpt', 'gemini', 'perplexity']);
   const [simulationResults, setSimulationResults] = useState<SimulationResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [simulationComplete, setSimulationComplete] = useState(false);
   
+  // Mock Discovery Dataset - in real app, this would come from user data
+  const [discoveryQueries] = useState<DiscoveryQuery[]>([
+    {
+      id: '1',
+      query: 'best luxury cruises to Antarctica',
+      topic: 'Luxury Travel',
+      persona: 'Adventure-seeking retiree',
+      funnelStage: 'Consideration'
+    },
+    {
+      id: '2', 
+      query: 'Seabourn vs Regent for world cruise',
+      topic: 'Luxury Travel',
+      persona: 'Affluent traveler',
+      funnelStage: 'Decision'
+    },
+    {
+      id: '3',
+      query: 'which cruise lines include butler service',
+      topic: 'Premium Amenities',
+      persona: 'Luxury service seeker',
+      funnelStage: 'Awareness'
+    }
+  ]);
+  
   const stepLabels = [
-    'Input Query',
-    'Detect Intent',
-    'Simulate LLM',
+    'Select Query',
+    'Detect Context',
+    'Simulate AI',
     'Match Content',
-    'Select Models'
+    'Test Models'
   ];
 
   useEffect(() => {
@@ -65,23 +107,28 @@ const PromptLab = () => {
     }
   }, [location.state]);
   
+  const handleQuerySelect = (selectedQuery: string) => {
+    setQuery(selectedQuery);
+    
+    // Find matching query context from Discovery Dataset
+    const matchingQuery = discoveryQueries.find(q => q.query === selectedQuery);
+    if (matchingQuery) {
+      setQueryContext({
+        topic: matchingQuery.topic,
+        persona: matchingQuery.persona,
+        funnelStage: matchingQuery.funnelStage
+      });
+    }
+  };
+
   const handleDetectIntent = async () => {
     setIsLoading(true);
     
-    // Simulate GPT-4 intent detection
+    // Enhanced simulation with context
     setTimeout(() => {
-      const personas = [
-        'Eco-conscious consumer',
-        'Budget-conscious shopper', 
-        'Corporate ESG manager',
-        'Climate change advocate',
-        'Trend-conscious Gen Z',
-        'Small business buyer'
-      ];
-      
       const mockIntent = `Finding sustainable and ethical ${query.includes('brand') ? 'brands' : 'products'} that align with environmental values and transparent business practices`;
-      const mockPersona = personas[Math.floor(Math.random() * personas.length)];
-      const mockReasoning = `Based on keywords like "${query.split(' ').slice(0, 3).join(', ')}" the user appears to be prioritizing sustainability and transparency, indicating they are likely an ${mockPersona.toLowerCase()}.`;
+      const mockPersona = queryContext.persona || 'Eco-conscious consumer';
+      const mockReasoning = `Based on the query "${query}" and the ${queryContext.funnelStage} stage, this user is likely a ${mockPersona} looking for detailed comparisons and specific features.`;
       
       setIntentData({
         intent: mockIntent,
@@ -91,33 +138,33 @@ const PromptLab = () => {
       
       setCurrentStep(2);
       setIsLoading(false);
-      toast.success("Intent and persona detected");
+      toast.success("Query context analyzed");
     }, 1500);
   };
 
   const handleSimulateLLM = async () => {
     setIsLoading(true);
     
-    // Simulate LLM response generation
     setTimeout(() => {
       const mockResponse = `Based on your search for "${query}", here are some top recommendations:
 
-**Sustainable and Transparent Brands:**
+**For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
 
-1. **Patagonia** - Known for their environmental activism and "Don't Buy This Jacket" campaign. They offer detailed supply chain transparency and use recycled materials extensively.
+1. **Seabourn** - Ultra-luxury with all-suite accommodations and personalized service. Perfect for discerning travelers seeking intimate expedition experiences.
 
-2. **Everlane** - Focuses on "Radical Transparency" by sharing the true cost of their products and factory information. They're committed to sustainable practices and ethical manufacturing.
+2. **Regent Seven Seas** - All-inclusive luxury with spacious suites and exceptional service. Known for comprehensive shore excursions.
 
-3. **Eileen Fisher** - Pioneering circular fashion with their take-back program and commitment to organic fibers. They publish detailed sustainability reports.
+3. **Silversea** - Premium expedition cruising with expert guides and zodiac landings. Butler service available in all suites.
 
-4. **Reformation** - Carbon-neutral brand that tracks and shares the environmental impact of each garment. They use sustainable materials and deadstock fabrics.
-
-When choosing sustainable brands, look for certifications like B-Corp, GOTS (Global Organic Textile Standard), and detailed supply chain information. Consider the brand's overall mission, not just individual eco-friendly products.`;
+These brands offer the premium amenities and personalized service that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of planning.`;
 
       setSimulatedResponse(mockResponse);
+      setBrandMentioned(Math.random() > 0.4); // Random for demo
+      setMatchScore(Math.floor(Math.random() * 30) + 70);
+      setPersonaFit(`This content meets 85% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on luxury and service quality.`);
       setCurrentStep(3);
       setIsLoading(false);
-      toast.success("LLM response simulated");
+      toast.success("AI response simulated");
     }, 2000);
   };
 
@@ -175,23 +222,36 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
     navigate('/');
   };
   
+  const handleGoToDiscoveryDataset = () => {
+    navigate('/discovery-dataset');
+  };
+  
   return (
     <TooltipProvider>
       <MainDashboardLayout>
         <div className="space-y-6">
           <div>
-            <Button 
-              variant="ghost" 
-              className="mb-4" 
-              onClick={handleBackToIndex}
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back to Optimly Index
-            </Button>
+            <div className="flex items-center justify-between mb-4">
+              <Button 
+                variant="ghost" 
+                onClick={handleBackToIndex}
+              >
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to Optimly Index
+              </Button>
+              
+              <Button 
+                variant="outline"
+                onClick={handleGoToDiscoveryDataset}
+              >
+                <Database className="h-4 w-4 mr-1" />
+                Manage Queries
+              </Button>
+            </div>
             
             <h1 className="text-3xl font-bold mb-2">AI Search Simulator</h1>
             <p className="text-lg text-muted-foreground">
-              Test how your content performs in AI search responses with our 5-step simulation
+              Test how your brand content performs when customers ask AI assistants about your industry
             </p>
           </div>
 
@@ -202,12 +262,23 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
           />
 
           <div className="space-y-6">
-            <QueryInputStep
-              query={query}
-              onQueryChange={setQuery}
+            <QuerySelectionStep
+              selectedQuery={query}
+              discoveryQueries={discoveryQueries}
+              onQuerySelect={handleQuerySelect}
               onDetectIntent={handleDetectIntent}
               isLoading={isLoading && currentStep === 1}
             />
+
+            {query && queryContext.topic && (
+              <ContextSummaryBar
+                query={query}
+                topic={queryContext.topic}
+                persona={queryContext.persona}
+                funnelStage={queryContext.funnelStage}
+                onEdit={() => setCurrentStep(1)}
+              />
+            )}
 
             <IntentDetectionStep
               intentData={intentData}
@@ -216,13 +287,16 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
               isLoading={isLoading && currentStep === 2}
             />
 
-            <LLMSimulationStep
+            <EnhancedSimulationStep
               simulatedResponse={simulatedResponse}
-              onContinue={() => setCurrentStep(3)}
+              brandMentioned={brandMentioned}
+              matchScore={matchScore}
+              personaFit={personaFit}
+              onContinue={() => setCurrentStep(4)}
               isLoading={isLoading && currentStep === 3}
               query={query}
-              intent={intentData?.intent || ''}
-              persona={intentData?.persona || ''}
+              persona={queryContext.persona}
+              funnelStage={queryContext.funnelStage}
             />
 
             <ContentMatchStep
@@ -230,15 +304,17 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
               onContentChange={setBrandContent}
               matchResult={matchResult}
               onScoreMatch={handleScoreMatch}
-              onContinue={() => setCurrentStep(4)}
+              onContinue={() => setCurrentStep(5)}
               isLoading={isLoading && currentStep === 4}
             />
 
-            <ModelSelectionStep
+            <EnhancedModelSelection
               selectedModels={selectedModels}
               onModelToggle={handleModelToggle}
               onRunSimulation={handleRunSimulation}
               isLoading={isLoading && currentStep === 5}
+              persona={queryContext.persona}
+              funnelStage={queryContext.funnelStage}
             />
 
             {simulationComplete && !isLoading && (
