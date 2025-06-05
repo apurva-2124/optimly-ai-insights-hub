@@ -38,7 +38,7 @@ export const EnhancedModelSelection: React.FC<EnhancedModelSelectionProps> = ({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm">5</span>
+          <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm">6</span>
           Run Visibility Test
         </CardTitle>
         <CardDescription>
