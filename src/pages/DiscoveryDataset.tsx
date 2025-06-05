@@ -4,6 +4,7 @@ import { MainDashboardLayout } from '@/components/layout/MainDashboardLayout';
 import { AIGenerator } from '@/components/discovery/AIGenerator';
 import { ManualEntry } from '@/components/discovery/ManualEntry';
 import { DiscoveryExplainer } from '@/components/discovery/DiscoveryExplainer';
+import { EmptyDiscoveryState } from '@/components/discovery/EmptyDiscoveryState';
 import { Brand } from '@/lib/types';
 import { dummyBrand } from '@/lib/dummy-data';
 
@@ -33,6 +34,14 @@ const DiscoveryDataset = () => {
     setDiscoveryQueries(prev => prev.filter(q => q.id !== id));
   };
 
+  const handleAddQueriesFromEmpty = () => {
+    // Scroll to AI Generator section
+    const generatorSection = document.querySelector('.ai-generator-section');
+    if (generatorSection) {
+      generatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <MainDashboardLayout>
       <div className="space-y-8">
@@ -45,19 +54,41 @@ const DiscoveryDataset = () => {
           <DiscoveryExplainer />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <AIGenerator 
-            brand={brand}
-            onAddQueries={handleAddQueries}
-          />
-          
-          <ManualEntry 
-            queries={discoveryQueries}
-            onUpdateQuery={handleUpdateQuery}
-            onRemoveQuery={handleRemoveQuery}
-            onAddQueries={handleAddQueries}
-          />
-        </div>
+        {discoveryQueries.length === 0 ? (
+          <EmptyDiscoveryState onAddQueries={handleAddQueriesFromEmpty} />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ai-generator-section">
+            <AIGenerator 
+              brand={brand}
+              onAddQueries={handleAddQueries}
+            />
+            
+            <ManualEntry 
+              queries={discoveryQueries}
+              onUpdateQuery={handleUpdateQuery}
+              onRemoveQuery={handleRemoveQuery}
+              onAddQueries={handleAddQueries}
+            />
+          </div>
+        )}
+
+        {discoveryQueries.length === 0 && (
+          <div className="ai-generator-section">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <AIGenerator 
+                brand={brand}
+                onAddQueries={handleAddQueries}
+              />
+              
+              <ManualEntry 
+                queries={discoveryQueries}
+                onUpdateQuery={handleUpdateQuery}
+                onRemoveQuery={handleRemoveQuery}
+                onAddQueries={handleAddQueries}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </MainDashboardLayout>
   );
