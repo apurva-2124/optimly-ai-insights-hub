@@ -76,7 +76,8 @@ const Index = () => {
             queries={queries} 
             topics={topics}
             personas={personas}
-            onUpdateQueries={handleUpdateQueries} 
+            onUpdateQueries={handleUpdateQueries}
+            brand={brand || dummyBrand}
           />
         </div>
       </div>
