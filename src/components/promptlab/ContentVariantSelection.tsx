@@ -89,6 +89,9 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
       content: brandContent,
       persona: queryContext.persona,
       funnelStage: queryContext.funnelStage,
+      topic: queryContext.topic,
+      query: '',
+      format: 'Control',
       isControl: true
     },
     ...contentVariants
