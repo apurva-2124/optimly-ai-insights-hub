@@ -189,9 +189,9 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
               Back to Optimly Index
             </Button>
             
-            <h1 className="text-3xl font-bold mb-2">PromptLab</h1>
+            <h1 className="text-3xl font-bold mb-2">AI Search Simulator</h1>
             <p className="text-lg text-muted-foreground">
-              5-step simulation flow to test content variants against AI responses
+              Test how your content performs in AI search responses with our 5-step simulation
             </p>
           </div>
 

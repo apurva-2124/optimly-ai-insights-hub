@@ -6,6 +6,7 @@ import { QueryEditor } from '@/components/visibility/QueryEditor';
 import { TopicSummary } from '@/components/visibility/TopicSummary';
 import { QueryResultsTable } from '@/components/visibility/QueryResultsTable';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
+import { SuccessCard } from '@/components/discovery/SuccessCard';
 import { Brand, QueryResult, ContentVariant } from '@/lib/types';
 import { 
   dummyBrand, 

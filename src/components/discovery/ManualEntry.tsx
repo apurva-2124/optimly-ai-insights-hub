@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Card,
@@ -7,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash, Database, Info } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -17,21 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Plus, Upload, Trash2, HelpCircle, Edit3 } from "lucide-react";
-import { toast } from "sonner";
 
 interface DiscoveryQuery {
   id: string;
@@ -48,217 +38,208 @@ interface ManualEntryProps {
   onAddQueries: (queries: DiscoveryQuery[]) => void;
 }
 
-const personas = [
-  'Eco-conscious consumer',
-  'Budget-conscious shopper',
-  'Corporate ESG manager',
-  'Gen Z trend-seeker',
-  'Fitness-first buyer',
-  'Tech early adopter',
-  'Quality-focused buyer',
-  'Research-driven consumer',
-  'Online shopper'
-];
-
-const commonTopics = [
-  'Sustainability',
-  'Brand Comparison',
-  'Quality Assessment',
-  'Purchase Channel',
-  'Product Reviews',
-  'Pricing',
-  'Customer Service',
-  'Innovation',
-  'Social Impact'
-];
-
-export const ManualEntry: React.FC<ManualEntryProps> = ({
-  queries,
-  onUpdateQuery,
-  onRemoveQuery,
-  onAddQueries
+export const ManualEntry: React.FC<ManualEntryProps> = ({ 
+  queries, 
+  onUpdateQuery, 
+  onRemoveQuery, 
+  onAddQueries 
 }) => {
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [newQuery, setNewQuery] = useState('');
+  const [newTopic, setNewTopic] = useState('');
+  const [newPersona, setNewPersona] = useState('');
+  const [newFunnelStage, setNewFunnelStage] = useState<'Awareness' | 'Consideration' | 'Decision'>('Awareness');
 
-  const addNewQuery = () => {
-    const newQuery: DiscoveryQuery = {
-      id: `manual-${Date.now()}`,
-      query: '',
-      topic: '',
-      persona: '',
-      funnelStage: 'Awareness'
-    };
-    
-    onAddQueries([newQuery]);
-    setEditingId(newQuery.id);
+  const handleAddRow = () => {
+    const newId = `manual-${Date.now()}`;
+    onAddQueries([{ 
+      id: newId, 
+      query: newQuery, 
+      topic: newTopic, 
+      persona: newPersona, 
+      funnelStage: newFunnelStage 
+    }]);
+    setNewQuery('');
+    setNewTopic('');
+    setNewPersona('');
+    setNewFunnelStage('Awareness');
   };
-
-  const handleInputChange = (id: string, field: keyof DiscoveryQuery, value: string) => {
-    onUpdateQuery(id, { [field]: value });
-  };
-
-  const handleImportCSV = () => {
-    // For demo purposes, show a toast
-    toast.info("CSV import feature coming soon");
-  };
-
-  const FieldTooltip = ({ content, children }: { content: string; children: React.ReactNode }) => (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="flex items-center gap-1">
-            {children}
-            <HelpCircle className="h-3 w-3 text-muted-foreground" />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="max-w-xs">{content}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
 
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <Edit3 className="h-5 w-5 text-primary" />
-          <CardTitle>Or enter your own</CardTitle>
-        </div>
+        <CardTitle>Or enter your own queries</CardTitle>
         <CardDescription>
-          Manually add queries to track how AI assistants discover your brand
+          Manually add search queries that your customers might ask AI assistants
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Button onClick={addNewQuery} variant="outline" size="sm">
-            <Plus className="h-4 w-4 mr-1" />
-            Add New Row
-          </Button>
-          <Button onClick={handleImportCSV} variant="outline" size="sm">
-            <Upload className="h-4 w-4 mr-1" />
-            Import CSV
-          </Button>
+        <div className="space-y-3">
+          {queries.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Database className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>No queries added yet</p>
+              <p className="text-sm">Add your first query to get started</p>
+            </div>
+          ) : (
+            queries.map((query) => (
+              <div key={query.id} className="border rounded-lg p-4 space-y-3">
+                <div className="space-y-2">
+                  <Label htmlFor={`query-${query.id}`} className="text-sm font-medium">
+                    Query
+                  </Label>
+                  <Input
+                    id={`query-${query.id}`}
+                    value={query.query}
+                    onChange={(e) => onUpdateQuery(query.id, { query: e.target.value })}
+                    placeholder="Enter search query"
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor={`topic-${query.id}`} className="text-sm font-medium">
+                      Topic
+                    </Label>
+                    <Input
+                      id={`topic-${query.id}`}
+                      value={query.topic}
+                      onChange={(e) => onUpdateQuery(query.id, { topic: e.target.value })}
+                      placeholder="e.g., Sustainability"
+                      className="text-sm"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor={`persona-${query.id}`} className="text-sm font-medium">
+                      Persona
+                    </Label>
+                    <Input
+                      id={`persona-${query.id}`}
+                      value={query.persona}
+                      onChange={(e) => onUpdateQuery(query.id, { persona: e.target.value })}
+                      placeholder="e.g., Eco-conscious consumer"
+                      className="text-sm"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={`funnel-${query.id}`} className="text-sm font-medium">
+                        Funnel Stage
+                      </Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>
+                            Funnel stage reflects where the customer is in their journey. Use this to see how your content performs for people who are just browsing vs. ready to buy. It affects how LLMs shape their responses.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Select
+                      value={query.funnelStage}
+                      onValueChange={(value: 'Awareness' | 'Consideration' | 'Decision') => 
+                        onUpdateQuery(query.id, { funnelStage: value })
+                      }
+                    >
+                      <SelectTrigger id={`funnel-${query.id}`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Awareness">Awareness</SelectItem>
+                        <SelectItem value="Consideration">Consideration</SelectItem>
+                        <SelectItem value="Decision">Decision</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => onRemoveQuery(query.id)}
+                  className="ml-auto block w-fit -mb-2"
+                >
+                  <Trash className="h-4 w-4 mr-2" />
+                  Remove
+                </Button>
+              </div>
+            ))
+          )}
         </div>
 
-        {queries.length > 0 && (
-          <div className="border rounded-md">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[35%]">
-                    <FieldTooltip content="What a user might ask an AI assistant when looking for brands like yours">
-                      Query
-                    </FieldTooltip>
-                  </TableHead>
-                  <TableHead className="w-[20%]">
-                    <FieldTooltip content="The main theme or category of the query">
-                      Topic
-                    </FieldTooltip>
-                  </TableHead>
-                  <TableHead className="w-[25%]">
-                    <FieldTooltip content="The type of user most likely to ask this question">
-                      Persona
-                    </FieldTooltip>
-                  </TableHead>
-                  <TableHead className="w-[15%]">
-                    <FieldTooltip content="Where the user is in their buying journey">
-                      Funnel Stage
-                    </FieldTooltip>
-                  </TableHead>
-                  <TableHead className="w-[5%]"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {queries.map((query) => (
-                  <TableRow key={query.id}>
-                    <TableCell>
-                      <Input
-                        value={query.query}
-                        onChange={(e) => handleInputChange(query.id, 'query', e.target.value)}
-                        placeholder="e.g. best sustainable fashion brands"
-                        className="border-none p-0 h-auto focus-visible:ring-0"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Select 
-                        value={query.topic} 
-                        onValueChange={(value) => handleInputChange(query.id, 'topic', value)}
-                      >
-                        <SelectTrigger className="border-none h-auto p-0">
-                          <SelectValue placeholder="Select topic" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {commonTopics.map((topic) => (
-                            <SelectItem key={topic} value={topic}>
-                              {topic}
-                            </SelectItem>
-                          ))}
-                          <SelectItem value="custom">Custom...</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {query.topic === 'custom' && (
-                        <Input
-                          value={query.topic}
-                          onChange={(e) => handleInputChange(query.id, 'topic', e.target.value)}
-                          placeholder="Enter custom topic"
-                          className="mt-1"
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Select 
-                        value={query.persona} 
-                        onValueChange={(value) => handleInputChange(query.id, 'persona', value)}
-                      >
-                        <SelectTrigger className="border-none h-auto p-0">
-                          <SelectValue placeholder="Select persona" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {personas.map((persona) => (
-                            <SelectItem key={persona} value={persona}>
-                              {persona}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell>
-                      <Select 
-                        value={query.funnelStage} 
-                        onValueChange={(value) => handleInputChange(query.id, 'funnelStage', value as 'Awareness' | 'Consideration' | 'Decision')}
-                      >
-                        <SelectTrigger className="border-none h-auto p-0">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Awareness">Awareness</SelectItem>
-                          <SelectItem value="Consideration">Consideration</SelectItem>
-                          <SelectItem value="Decision">Decision</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onRemoveQuery(query.id)}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <div className="border rounded-lg p-4 space-y-3">
+          <h4 className="font-medium text-sm">Add Row:</h4>
+          <div className="space-y-2">
+            <Label htmlFor="new-query" className="text-sm font-medium">
+              Query
+            </Label>
+            <Input
+              id="new-query"
+              value={newQuery}
+              onChange={(e) => setNewQuery(e.target.value)}
+              placeholder="Enter search query"
+              className="text-sm"
+            />
           </div>
-        )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="space-y-2">
+              <Label htmlFor="new-topic" className="text-sm font-medium">
+                Topic
+              </Label>
+              <Input
+                id="new-topic"
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                placeholder="e.g., Sustainability"
+                className="text-sm"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="new-persona" className="text-sm font-medium">
+                Persona
+              </Label>
+              <Input
+                id="new-persona"
+                value={newPersona}
+                onChange={(e) => setNewPersona(e.target.value)}
+                placeholder="e.g., Eco-conscious consumer"
+                className="text-sm"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="new-funnel" className="text-sm font-medium">
+                Funnel Stage
+              </Label>
+              <Select
+                value={newFunnelStage}
+                onValueChange={(value: 'Awareness' | 'Consideration' | 'Decision') => 
+                  setNewFunnelStage(value)
+                }
+              >
+                <SelectTrigger id="new-funnel">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Awareness">Awareness</SelectItem>
+                  <SelectItem value="Consideration">Consideration</SelectItem>
+                  <SelectItem value="Decision">Decision</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-        {queries.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <p>No queries added yet. Click "Add New Row" to get started.</p>
-          </div>
-        )}
+          <Button onClick={handleAddRow} className="w-full">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Query
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

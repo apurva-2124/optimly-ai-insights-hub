@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { BarChart3, FlaskConical, Database } from 'lucide-react';
+import { BarChart3, Search, Database } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -26,9 +26,9 @@ const navigation = [
     icon: Database,
   },
   {
-    name: 'Prompt Lab',
+    name: 'AI Search Simulator',
     href: '/promptlab',
-    icon: FlaskConical,
+    icon: Search,
   }
 ];
 
