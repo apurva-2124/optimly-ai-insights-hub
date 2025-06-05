@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { MainDashboardLayout } from '@/components/layout/MainDashboardLayout';
 import { AIGenerator } from '@/components/discovery/AIGenerator';
 import { ManualEntry } from '@/components/discovery/ManualEntry';
 import { Brand } from '@/lib/types';
@@ -33,28 +33,30 @@ const DiscoveryDataset = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Build Your Discovery Dataset</h1>
-        <p className="text-lg text-muted-foreground">
-          Create queries that help track how AI assistants discover and recommend your brand
-        </p>
-      </div>
+    <MainDashboardLayout>
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Build Your Discovery Dataset</h1>
+          <p className="text-lg text-muted-foreground">
+            Create queries that help track how AI assistants discover and recommend your brand
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <AIGenerator 
-          brand={brand}
-          onAddQueries={handleAddQueries}
-        />
-        
-        <ManualEntry 
-          queries={discoveryQueries}
-          onUpdateQuery={handleUpdateQuery}
-          onRemoveQuery={handleRemoveQuery}
-          onAddQueries={handleAddQueries}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <AIGenerator 
+            brand={brand}
+            onAddQueries={handleAddQueries}
+          />
+          
+          <ManualEntry 
+            queries={discoveryQueries}
+            onUpdateQuery={handleUpdateQuery}
+            onRemoveQuery={handleRemoveQuery}
+            onAddQueries={handleAddQueries}
+          />
+        </div>
       </div>
-    </AppLayout>
+    </MainDashboardLayout>
   );
 };
 

@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { MainDashboardLayout } from '@/components/layout/MainDashboardLayout';
 import { SimulationResults } from '@/components/promptlab/SimulationResults';
 import { StepIndicator } from '@/components/promptlab/StepIndicator';
 import { QueryInputStep } from '@/components/promptlab/QueryInputStep';
@@ -178,77 +177,79 @@ When choosing sustainable brands, look for certifications like B-Corp, GOTS (Glo
   
   return (
     <TooltipProvider>
-      <AppLayout>
-        <div className="mb-6">
-          <Button 
-            variant="ghost" 
-            className="mb-4" 
-            onClick={handleBackToIndex}
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to Optimly Index
-          </Button>
-          
-          <h1 className="text-3xl font-bold mb-2">PromptLab</h1>
-          <p className="text-lg text-muted-foreground">
-            5-step simulation flow to test content variants against AI responses
-          </p>
-        </div>
-
-        <StepIndicator 
-          currentStep={currentStep}
-          totalSteps={5}
-          stepLabels={stepLabels}
-        />
-
+      <MainDashboardLayout>
         <div className="space-y-6">
-          <QueryInputStep
-            query={query}
-            onQueryChange={setQuery}
-            onDetectIntent={handleDetectIntent}
-            isLoading={isLoading && currentStep === 1}
+          <div>
+            <Button 
+              variant="ghost" 
+              className="mb-4" 
+              onClick={handleBackToIndex}
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back to Optimly Index
+            </Button>
+            
+            <h1 className="text-3xl font-bold mb-2">PromptLab</h1>
+            <p className="text-lg text-muted-foreground">
+              5-step simulation flow to test content variants against AI responses
+            </p>
+          </div>
+
+          <StepIndicator 
+            currentStep={currentStep}
+            totalSteps={5}
+            stepLabels={stepLabels}
           />
 
-          <IntentDetectionStep
-            intentData={intentData}
-            onEdit={() => setCurrentStep(1)}
-            onContinue={handleSimulateLLM}
-            isLoading={isLoading && currentStep === 2}
-          />
-
-          <LLMSimulationStep
-            simulatedResponse={simulatedResponse}
-            onContinue={() => setCurrentStep(3)}
-            isLoading={isLoading && currentStep === 3}
-            query={query}
-            intent={intentData?.intent || ''}
-            persona={intentData?.persona || ''}
-          />
-
-          <ContentMatchStep
-            brandContent={brandContent}
-            onContentChange={setBrandContent}
-            matchResult={matchResult}
-            onScoreMatch={handleScoreMatch}
-            onContinue={() => setCurrentStep(4)}
-            isLoading={isLoading && currentStep === 4}
-          />
-
-          <ModelSelectionStep
-            selectedModels={selectedModels}
-            onModelToggle={handleModelToggle}
-            onRunSimulation={handleRunSimulation}
-            isLoading={isLoading && currentStep === 5}
-          />
-
-          {simulationComplete && !isLoading && (
-            <SimulationResults 
-              results={simulationResults} 
-              onSelectWinner={handleSelectWinner}
+          <div className="space-y-6">
+            <QueryInputStep
+              query={query}
+              onQueryChange={setQuery}
+              onDetectIntent={handleDetectIntent}
+              isLoading={isLoading && currentStep === 1}
             />
-          )}
+
+            <IntentDetectionStep
+              intentData={intentData}
+              onEdit={() => setCurrentStep(1)}
+              onContinue={handleSimulateLLM}
+              isLoading={isLoading && currentStep === 2}
+            />
+
+            <LLMSimulationStep
+              simulatedResponse={simulatedResponse}
+              onContinue={() => setCurrentStep(3)}
+              isLoading={isLoading && currentStep === 3}
+              query={query}
+              intent={intentData?.intent || ''}
+              persona={intentData?.persona || ''}
+            />
+
+            <ContentMatchStep
+              brandContent={brandContent}
+              onContentChange={setBrandContent}
+              matchResult={matchResult}
+              onScoreMatch={handleScoreMatch}
+              onContinue={() => setCurrentStep(4)}
+              isLoading={isLoading && currentStep === 4}
+            />
+
+            <ModelSelectionStep
+              selectedModels={selectedModels}
+              onModelToggle={handleModelToggle}
+              onRunSimulation={handleRunSimulation}
+              isLoading={isLoading && currentStep === 5}
+            />
+
+            {simulationComplete && !isLoading && (
+              <SimulationResults 
+                results={simulationResults} 
+                onSelectWinner={handleSelectWinner}
+              />
+            )}
+          </div>
         </div>
-      </AppLayout>
+      </MainDashboardLayout>
     </TooltipProvider>
   );
 };
