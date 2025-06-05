@@ -1,4 +1,3 @@
-
 import { Brand, ContentVariant, ModelResult, QueryResult, SimulationResult } from "./types";
 
 // Brand Data
@@ -161,27 +160,33 @@ export const dummyQueries: QueryResult[] = [
 export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v1",
+    name: "Comprehensive Approach",
     content: "EcoThreads stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
     format: "Paragraph",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
-    query: "best ethical clothing brands"
+    query: "best ethical clothing brands",
+    funnelStage: "Consideration"
   },
   {
     id: "v2",
+    name: "Feature-Focused List",
     content: "# Why EcoThreads Leads in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
     format: "Bulleted List",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
-    query: "best ethical clothing brands"
+    query: "best ethical clothing brands",
+    funnelStage: "Consideration"
   },
   {
     id: "v3",
+    name: "Q&A Style",
     content: "**Q: What makes EcoThreads an ethical fashion leader?**\n\nA: EcoThreads has revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
     format: "Q&A Block",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
-    query: "best ethical clothing brands"
+    query: "best ethical clothing brands",
+    funnelStage: "Decision"
   }
 ];
 
@@ -261,27 +266,33 @@ export const generateDummyContentVariants = (queryResult: QueryResult): ContentV
   return [
     {
       id: `v-${Date.now()}-1`,
+      name: "Standard Approach",
       content: `${dummyBrand.name} is at the forefront of ${queryResult.topic.toLowerCase()} with our innovative approach to sustainable practices. We prioritize environmental responsibility while maintaining affordable pricing and stylish designs that appeal to ${queryResult.persona.toLowerCase()} audiences.`,
       format: "Paragraph",
       topic: queryResult.topic,
       persona: queryResult.persona,
-      query: queryResult.query
+      query: queryResult.query,
+      funnelStage: "Consideration"
     },
     {
       id: `v-${Date.now()}-2`,
+      name: "Feature Highlights",
       content: `# Why ${dummyBrand.name} Leads in ${queryResult.topic}\n\n• **Innovation**: Pioneering sustainable materials and practices\n• **Commitment**: Dedicated to ethical production and fair wages\n• **Transparency**: Full visibility into our supply chain\n• **Quality**: Premium products that last longer, reducing waste`,
       format: "Bulleted List",
       topic: queryResult.topic,
       persona: queryResult.persona,
-      query: queryResult.query
+      query: queryResult.query,
+      funnelStage: "Awareness"
     },
     {
       id: `v-${Date.now()}-3`,
+      name: "Q&A Format",
       content: `**Q: What makes ${dummyBrand.name} stand out in ${queryResult.topic}?**\n\nA: ${dummyBrand.name} has revolutionized the approach to ${queryResult.topic.toLowerCase()} by combining cutting-edge sustainability practices with accessible price points. Our commitment to ethical sourcing and production ensures that every product meets the highest standards of social and environmental responsibility.`,
       format: "Q&A Block",
       topic: queryResult.topic,
       persona: queryResult.persona,
-      query: queryResult.query
+      query: queryResult.query,
+      funnelStage: "Decision"
     }
   ];
 };
