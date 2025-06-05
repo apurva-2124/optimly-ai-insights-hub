@@ -5,6 +5,8 @@ export type VisibilityStatus = 'high' | 'medium' | 'low' | 'absent';
 
 export type CitationType = 'inline' | 'link' | 'none';
 
+export type BrandMentionPosition = 'top' | 'mid' | 'bottom' | 'omitted';
+
 export interface ModelResult {
   model: ModelType;
   mentioned: boolean;
@@ -40,6 +42,13 @@ export interface SimulationResult {
   confidenceScore: number;
   sentiment: 'positive' | 'neutral' | 'negative';
   isControl?: boolean;
+}
+
+export interface SimulationAnalysis {
+  llmResponse: string;
+  variantScores: Record<string, number>;
+  brandMentions: Record<string, BrandMentionPosition>;
+  reasoning: string;
 }
 
 export interface Brand {
