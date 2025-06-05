@@ -1,7 +1,7 @@
 
 import React, { ReactNode } from 'react';
 import { AppHeader } from './AppHeader';
-import { AppNavigation } from './AppNavigation';
+import AppNavigation from './AppNavigation';
 
 interface AppLayoutProps {
   children: ReactNode;
