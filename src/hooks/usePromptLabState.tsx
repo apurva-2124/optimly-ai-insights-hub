@@ -45,6 +45,8 @@ export const usePromptLabState = () => {
   const [simulationResults, setSimulationResults] = useState<SimulationResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [simulationComplete, setSimulationComplete] = useState(false);
+  const [contentVariants, setContentVariants] = useState<ContentVariant[]>([]);
+  const [selectedVariants, setSelectedVariants] = useState<string[]>(['control']);
   
   const [discoveryQueries] = useState<DiscoveryQuery[]>([
     {
@@ -77,6 +79,7 @@ export const usePromptLabState = () => {
       setQuery(queryResult.query);
       if (variants.length > 0) {
         setBrandContent(variants[0].content);
+        setContentVariants(variants.slice(1));
       }
     }
   }, [location.state]);
@@ -169,7 +172,7 @@ These brands offer the premium amenities and personalized service that ${queryCo
 
   const handleRunSimulation = async () => {
     setIsLoading(true);
-    setCurrentStep(5);
+    setCurrentStep(6);
     
     setTimeout(() => {
       const results = dummySimulationResults.filter(
@@ -186,6 +189,48 @@ These brands offer the premium amenities and personalized service that ${queryCo
   const handleSelectWinner = (result: SimulationResult) => {
     console.log("Selected winner:", result);
     toast.success("Winner selected!");
+  };
+
+  const handleAddVariant = (variant: Omit<ContentVariant, 'id'>) => {
+    const newVariant: ContentVariant = {
+      ...variant,
+      id: `variant-${Date.now()}`
+    };
+    setContentVariants(prev => [...prev, newVariant]);
+    setSelectedVariants(prev => [...prev, newVariant.id]);
+    toast.success("Variant added");
+  };
+
+  const handleUpdateVariant = (id: string, updates: Partial<ContentVariant>) => {
+    setContentVariants(prev => 
+      prev.map(variant => 
+        variant.id === id ? { ...variant, ...updates } : variant
+      )
+    );
+  };
+
+  const handleDeleteVariant = (id: string) => {
+    setContentVariants(prev => prev.filter(variant => variant.id !== id));
+    setSelectedVariants(prev => prev.filter(variantId => variantId !== id));
+    toast.success("Variant deleted");
+  };
+
+  const handleToggleVariant = (id: string) => {
+    setSelectedVariants(prev => {
+      if (id === 'control') {
+        // Control cannot be deselected if it's the only one
+        if (prev.includes('control') && prev.length === 1) {
+          return prev;
+        }
+        return prev.includes('control') 
+          ? prev.filter(variantId => variantId !== 'control')
+          : [...prev, 'control'];
+      }
+      
+      return prev.includes(id)
+        ? prev.filter(variantId => variantId !== id)
+        : [...prev, id];
+    });
   };
 
   return {
@@ -206,12 +251,18 @@ These brands offer the premium amenities and personalized service that ${queryCo
     isLoading,
     simulationComplete,
     discoveryQueries,
+    contentVariants,
+    selectedVariants,
     handleQuerySelect,
     handleDetectIntent,
     handleSimulateLLM,
     handleScoreMatch,
     handleModelToggle,
     handleRunSimulation,
-    handleSelectWinner
+    handleSelectWinner,
+    handleAddVariant,
+    handleUpdateVariant,
+    handleDeleteVariant,
+    handleToggleVariant
   };
 };

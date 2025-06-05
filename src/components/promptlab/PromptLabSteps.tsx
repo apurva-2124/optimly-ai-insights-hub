@@ -6,9 +6,10 @@ import { ContextSummaryBar } from '@/components/promptlab/ContextSummaryBar';
 import { IntentDetectionStep } from '@/components/promptlab/IntentDetectionStep';
 import { EnhancedSimulationStep } from '@/components/promptlab/EnhancedSimulationStep';
 import { ContentMatchStep } from '@/components/promptlab/ContentMatchStep';
+import { ContentVariantSelection } from '@/components/promptlab/ContentVariantSelection';
 import { EnhancedModelSelection } from '@/components/promptlab/EnhancedModelSelection';
 import { SimulationResults } from '@/components/promptlab/SimulationResults';
-import { IntentData, MatchResult, DiscoveryQuery, SimulationResult } from '@/lib/types';
+import { IntentData, MatchResult, DiscoveryQuery, SimulationResult, ContentVariant } from '@/lib/types';
 
 interface PromptLabStepsProps {
   currentStep: number;
@@ -31,6 +32,8 @@ interface PromptLabStepsProps {
   simulationResults: SimulationResult[];
   isLoading: boolean;
   simulationComplete: boolean;
+  contentVariants: ContentVariant[];
+  selectedVariants: string[];
   onQuerySelect: (selectedQuery: string) => void;
   onDetectIntent: () => void;
   onSimulateLLM: () => void;
@@ -41,6 +44,10 @@ interface PromptLabStepsProps {
   onSelectWinner: (result: SimulationResult) => void;
   onEditContext: () => void;
   onSetCurrentStep: (step: number) => void;
+  onAddVariant: (variant: Omit<ContentVariant, 'id'>) => void;
+  onUpdateVariant: (id: string, variant: Partial<ContentVariant>) => void;
+  onDeleteVariant: (id: string) => void;
+  onToggleVariant: (id: string) => void;
 }
 
 export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
@@ -60,6 +67,8 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
   simulationResults,
   isLoading,
   simulationComplete,
+  contentVariants,
+  selectedVariants,
   onQuerySelect,
   onDetectIntent,
   onSimulateLLM,
@@ -69,13 +78,17 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
   onRunSimulation,
   onSelectWinner,
   onEditContext,
-  onSetCurrentStep
+  onSetCurrentStep,
+  onAddVariant,
+  onUpdateVariant,
+  onDeleteVariant,
+  onToggleVariant
 }) => {
   return (
     <div className="space-y-6">
       <StepIndicator 
         currentStep={currentStep}
-        totalSteps={5}
+        totalSteps={6}
         stepLabels={stepLabels}
       />
 
@@ -126,11 +139,24 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
           isLoading={isLoading && currentStep === 4}
         />
 
+        <ContentVariantSelection
+          contentVariants={contentVariants}
+          selectedVariants={selectedVariants}
+          brandContent={brandContent}
+          queryContext={queryContext}
+          onAddVariant={onAddVariant}
+          onUpdateVariant={onUpdateVariant}
+          onDeleteVariant={onDeleteVariant}
+          onToggleVariant={onToggleVariant}
+          onContinue={() => onSetCurrentStep(6)}
+          isLoading={isLoading && currentStep === 5}
+        />
+
         <EnhancedModelSelection
           selectedModels={selectedModels}
           onModelToggle={onModelToggle}
           onRunSimulation={onRunSimulation}
-          isLoading={isLoading && currentStep === 5}
+          isLoading={isLoading && currentStep === 6}
           persona={queryContext.persona}
           funnelStage={queryContext.funnelStage}
         />

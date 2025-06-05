@@ -27,13 +27,19 @@ const PromptLab = () => {
     isLoading,
     simulationComplete,
     discoveryQueries,
+    contentVariants,
+    selectedVariants,
     handleQuerySelect,
     handleDetectIntent,
     handleSimulateLLM,
     handleScoreMatch,
     handleModelToggle,
     handleRunSimulation,
-    handleSelectWinner
+    handleSelectWinner,
+    handleAddVariant,
+    handleUpdateVariant,
+    handleDeleteVariant,
+    handleToggleVariant
   } = usePromptLabState();
   
   const stepLabels = [
@@ -41,7 +47,8 @@ const PromptLab = () => {
     'Detect Context',
     'Simulate AI',
     'Match Content',
-    'Test Models'
+    'Select Variants',
+    'Run Visibility Test'
   ];
   
   const handleBackToIndex = () => {
@@ -78,6 +85,8 @@ const PromptLab = () => {
             simulationResults={simulationResults}
             isLoading={isLoading}
             simulationComplete={simulationComplete}
+            contentVariants={contentVariants}
+            selectedVariants={selectedVariants}
             onQuerySelect={handleQuerySelect}
             onDetectIntent={handleDetectIntent}
             onSimulateLLM={handleSimulateLLM}
@@ -88,6 +97,10 @@ const PromptLab = () => {
             onSelectWinner={handleSelectWinner}
             onEditContext={() => setCurrentStep(1)}
             onSetCurrentStep={setCurrentStep}
+            onAddVariant={handleAddVariant}
+            onUpdateVariant={handleUpdateVariant}
+            onDeleteVariant={handleDeleteVariant}
+            onToggleVariant={handleToggleVariant}
           />
         </div>
       </MainDashboardLayout>
