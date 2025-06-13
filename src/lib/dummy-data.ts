@@ -1,8 +1,9 @@
+
 import { Brand, ContentVariant, ModelResult, QueryResult, SimulationResult } from "./types";
 
 // Brand Data
 export const dummyBrand: Brand = {
-  name: "EcoThreads",
+  name: "Eco Threads",
   industry: "Fashion & Apparel",
   competitors: ["Patagonia", "Everlane", "Reformation"]
 };
@@ -19,14 +20,14 @@ export const dummyQueries: QueryResult[] = [
         model: "chatgpt",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads stands out for their commitment to using organic materials and fair labor practices...",
+        snippet: "...Eco Threads stands out for their commitment to using organic materials and fair labor practices...",
         confidenceScore: 0.87
       },
       {
         model: "gemini",
         mentioned: true,
         citationType: "link",
-        snippet: "...brands like EcoThreads (ecothreads.com) offer sustainable options with transparent supply chains...",
+        snippet: "...brands like Eco Threads (ecothreads.com) offer sustainable options with transparent supply chains...",
         confidenceScore: 0.91
       },
       {
@@ -55,14 +56,14 @@ export const dummyQueries: QueryResult[] = [
         model: "gemini",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads' essentials line provides eco-friendly basics at competitive price points...",
+        snippet: "...Eco Threads' essentials line provides eco-friendly basics at competitive price points...",
         confidenceScore: 0.72
       },
       {
         model: "perplexity",
         mentioned: true,
         citationType: "link",
-        snippet: "...EcoThreads (link) has recently introduced a more affordable collection called 'Everyday Eco'...",
+        snippet: "...Eco Threads (link) has recently introduced a more affordable collection called 'Everyday Eco'...",
         confidenceScore: 0.78
       }
     ]
@@ -77,21 +78,21 @@ export const dummyQueries: QueryResult[] = [
         model: "chatgpt",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads has pioneered the use of recycled ocean plastic in their swimwear collection...",
+        snippet: "...Eco Threads has pioneered the use of recycled ocean plastic in their swimwear collection...",
         confidenceScore: 0.94
       },
       {
         model: "gemini",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads sources over 80% of their materials from recycled sources...",
+        snippet: "...Eco Threads sources over 80% of their materials from recycled sources...",
         confidenceScore: 0.89
       },
       {
         model: "perplexity",
         mentioned: true,
         citationType: "link",
-        snippet: "...brands committed to recycled materials include Patagonia, EcoThreads (link), and Rothy's...",
+        snippet: "...brands committed to recycled materials include Patagonia, Eco Threads (link), and Rothy's...",
         confidenceScore: 0.81
       }
     ]
@@ -106,7 +107,7 @@ export const dummyQueries: QueryResult[] = [
         model: "chatgpt",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads publishes detailed supplier information and factory audit results...",
+        snippet: "...Eco Threads publishes detailed supplier information and factory audit results...",
         confidenceScore: 0.85
       },
       {
@@ -120,7 +121,7 @@ export const dummyQueries: QueryResult[] = [
         model: "perplexity",
         mentioned: true,
         citationType: "link",
-        snippet: "...Notable brands with transparent practices include Patagonia, EcoThreads (link)...",
+        snippet: "...Notable brands with transparent practices include Patagonia, Eco Threads (link)...",
         confidenceScore: 0.76
       }
     ]
@@ -142,7 +143,7 @@ export const dummyQueries: QueryResult[] = [
         model: "gemini",
         mentioned: true,
         citationType: "inline",
-        snippet: "...EcoThreads aims to be carbon neutral by 2025 through their comprehensive offsetting program...",
+        snippet: "...Eco Threads aims to be carbon neutral by 2025 through their comprehensive offsetting program...",
         confidenceScore: 0.83
       },
       {
@@ -161,7 +162,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v1",
     name: "Comprehensive Approach",
-    content: "EcoThreads stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
+    content: "Eco Threads stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
     format: "Paragraph",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -171,7 +172,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v2",
     name: "Feature-Focused List",
-    content: "# Why EcoThreads Leads in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
+    content: "# Why Eco Threads Leads in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
     format: "Bulleted List",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -181,7 +182,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v3",
     name: "Q&A Style",
-    content: "**Q: What makes EcoThreads an ethical fashion leader?**\n\nA: EcoThreads has revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
+    content: "**Q: What makes Eco Threads an ethical fashion leader?**\n\nA: Eco Threads has revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
     format: "Q&A Block",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",

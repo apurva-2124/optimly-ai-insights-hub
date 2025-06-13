@@ -51,23 +51,23 @@ export const usePromptLabState = () => {
   const [discoveryQueries] = useState<DiscoveryQuery[]>([
     {
       id: '1',
-      query: 'best luxury cruises to Antarctica',
-      topic: 'Luxury Travel',
-      persona: 'Adventure-seeking retiree',
+      query: 'best sustainable fashion brands for eco-conscious consumers',
+      topic: 'Sustainable Fashion',
+      persona: 'Eco-conscious consumer',
       funnelStage: 'Consideration'
     },
     {
       id: '2', 
-      query: 'Seabourn vs Regent for world cruise',
-      topic: 'Luxury Travel',
-      persona: 'Affluent traveler',
+      query: 'ethical clothing brands with transparent supply chains',
+      topic: 'Ethical Fashion',
+      persona: 'Environmental activist',
       funnelStage: 'Decision'
     },
     {
       id: '3',
-      query: 'which cruise lines include butler service',
-      topic: 'Premium Amenities',
-      persona: 'Luxury service seeker',
+      query: 'affordable organic cotton clothing brands',
+      topic: 'Organic Materials',
+      persona: 'Budget-conscious shopper',
       funnelStage: 'Awareness'
     }
   ]);
