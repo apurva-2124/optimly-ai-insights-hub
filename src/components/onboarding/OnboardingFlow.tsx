@@ -8,34 +8,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { 
-  BadgePlus, 
   ChevronRight, 
   ChevronLeft, 
   BarChart2, 
-  Sparkles,
   Target,
   Users,
   Tag,
   MessageSquare,
-  Rocket,
-  Trash2
+  Rocket
 } from "lucide-react";
-import { Brand, QueryResult } from '@/lib/types';
+import { Brand } from '@/lib/types';
 import { toast } from "sonner";
 import { StepIndicator } from './StepIndicator';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { BrandNameStep } from './steps/BrandNameStep';
+import { IndustryStep } from './steps/IndustryStep';
+import { CompetitorsStep } from './steps/CompetitorsStep';
+import { PersonasStep } from './steps/PersonasStep';
+import { TopicsStep } from './steps/TopicsStep';
+import { QueriesStep } from './steps/QueriesStep';
+import { LaunchStep } from './steps/LaunchStep';
+import { generatePersonas, generateTopics, generateQueries } from './utils/onboardingUtils';
 
 interface OnboardingFlowProps {
   onComplete: (brand: Brand) => void;
@@ -65,8 +60,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   const [isGeneratingTopics, setIsGeneratingTopics] = useState(false);
   const [isGeneratingQueries, setIsGeneratingQueries] = useState(false);
   
-  const funnelStages = ["Awareness", "Consideration", "Decision"];
-
   const stepLabels = [
     "Brand Name",
     "Industry", 
@@ -109,11 +102,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   };
   
   const handleAddCompetitor = () => {
-    if (!newCompetitor.trim()) return;
-    if (competitors.includes(newCompetitor)) {
-      toast.error("Competitor already added");
-      return;
-    }
     setCompetitors([...competitors, newCompetitor]);
     setNewCompetitor("");
   };
@@ -122,134 +110,24 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
     setCompetitors(competitors.filter(c => c !== competitor));
   };
 
-  const handleGeneratePersonas = async () => {
-    setIsGeneratingPersonas(true);
-    // Simulate AI generation
-    setTimeout(() => {
-      const generatedPersonas = [
-        "Eco-conscious millennials",
-        "Budget-conscious families", 
-        "Sustainable fashion advocates",
-        "Corporate sustainability managers",
-        "Gen Z ethical shoppers"
-      ];
-      setPersonaChips(generatedPersonas);
-      setIsGeneratingPersonas(false);
-      toast.success("Personas generated successfully!");
-    }, 2000);
+  const handleGeneratePersonas = () => {
+    generatePersonas(setPersonaChips, setIsGeneratingPersonas);
   };
 
-  const handleGenerateTopics = async () => {
-    setIsGeneratingTopics(true);
-    // Simulate AI generation
-    setTimeout(() => {
-      const generatedTopics = [
-        "Sustainable fashion",
-        "Organic cotton clothing",
-        "Ethical manufacturing", 
-        "Eco-friendly materials",
-        "Fair trade apparel",
-        "Circular fashion"
-      ];
-      setTopicChips(generatedTopics);
-      setIsGeneratingTopics(false);
-      toast.success("Topics generated successfully!");
-    }, 2000);
+  const handleGenerateTopics = () => {
+    generateTopics(setTopicChips, setIsGeneratingTopics);
   };
 
-  const handleAddPersonaFromText = () => {
-    if (!personas.trim()) return;
-    const newPersonas = personas.split(',').map(p => p.trim()).filter(p => p);
-    setPersonaChips([...personaChips, ...newPersonas]);
-    setPersonas("");
-  };
-
-  const handleAddTopicFromText = () => {
-    if (!topics.trim()) return;
-    const newTopics = topics.split(',').map(t => t.trim()).filter(t => t);
-    setTopicChips([...topicChips, ...newTopics]);
-    setTopics("");
-  };
-
-  const removePersonaChip = (index: number) => {
-    setPersonaChips(personaChips.filter((_, i) => i !== index));
-  };
-
-  const removeTopicChip = (index: number) => {
-    setTopicChips(topicChips.filter((_, i) => i !== index));
-  };
-
-  const handleAddQuery = () => {
-    if (!newQuery.trim()) return;
-    
-    const newQueryEntry: QueryEntry = {
-      id: `query-${Date.now()}`,
-      query: newQuery,
-      topic: topicChips[0] || "",
-      persona: personaChips[0] || "",
-      funnelStage: "Awareness"
-    };
-    
-    setQueries([...queries, newQueryEntry]);
-    setNewQuery("");
-  };
-
-  const handleGenerateQueries = async () => {
-    setIsGeneratingQueries(true);
-    // Simulate AI generation based on brand, industry, personas, and topics
-    setTimeout(() => {
-      const generatedQueries: QueryEntry[] = [
-        {
-          id: "gen-1",
-          query: "best sustainable fashion brands for organic cotton",
-          topic: topicChips[0] || "Sustainable fashion",
-          persona: personaChips[0] || "Eco-conscious millennials",
-          funnelStage: "Awareness"
-        },
-        {
-          id: "gen-2", 
-          query: `${brandName} vs ${competitors[0] || 'Patagonia'} for eco-friendly clothing`,
-          topic: topicChips[1] || "Ethical manufacturing",
-          persona: personaChips[1] || "Budget-conscious families",
-          funnelStage: "Consideration"
-        },
-        {
-          id: "gen-3",
-          query: "affordable ethical clothing brands with transparent supply chains",
-          topic: topicChips[2] || "Fair trade apparel",
-          persona: personaChips[0] || "Eco-conscious millennials",
-          funnelStage: "Decision"
-        },
-        {
-          id: "gen-4",
-          query: "clothing brands using recycled materials and sustainable practices",
-          topic: topicChips[3] || "Eco-friendly materials",
-          persona: personaChips[2] || "Sustainable fashion advocates",
-          funnelStage: "Awareness"
-        },
-        {
-          id: "gen-5",
-          query: "organic cotton t-shirts from ethical fashion brands",
-          topic: topicChips[4] || "Organic cotton clothing",
-          persona: personaChips[4] || "Gen Z ethical shoppers",
-          funnelStage: "Consideration"
-        }
-      ];
-      
-      setQueries([...queries, ...generatedQueries]);
-      setIsGeneratingQueries(false);
-      toast.success("Search queries generated successfully!");
-    }, 2000);
-  };
-
-  const handleRemoveQuery = (id: string) => {
-    setQueries(queries.filter(q => q.id !== id));
-  };
-
-  const handleUpdateQuery = (id: string, field: keyof QueryEntry, value: string) => {
-    setQueries(queries.map(q => 
-      q.id === id ? { ...q, [field]: value } : q
-    ));
+  const handleGenerateQueries = () => {
+    generateQueries(
+      brandName,
+      competitors,
+      personaChips,
+      topicChips,
+      queries,
+      setQueries,
+      setIsGeneratingQueries
+    );
   };
   
   const getProgressValue = () => {
@@ -266,6 +144,64 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       case 6: return <MessageSquare className="h-8 w-8" />;
       case 7: return <Rocket className="h-8 w-8" />;
       default: return <BarChart2 className="h-8 w-8" />;
+    }
+  };
+
+  const renderStep = () => {
+    switch(step) {
+      case 1:
+        return <BrandNameStep brandName={brandName} setBrandName={setBrandName} />;
+      case 2:
+        return <IndustryStep industry={industry} setIndustry={setIndustry} />;
+      case 3:
+        return (
+          <CompetitorsStep 
+            competitors={competitors}
+            newCompetitor={newCompetitor}
+            setNewCompetitor={setNewCompetitor}
+            onAddCompetitor={handleAddCompetitor}
+            onRemoveCompetitor={handleRemoveCompetitor}
+          />
+        );
+      case 4:
+        return (
+          <PersonasStep 
+            personas={personas}
+            setPersonas={setPersonas}
+            personaChips={personaChips}
+            setPersonaChips={setPersonaChips}
+            isGeneratingPersonas={isGeneratingPersonas}
+            onGeneratePersonas={handleGeneratePersonas}
+          />
+        );
+      case 5:
+        return (
+          <TopicsStep 
+            topics={topics}
+            setTopics={setTopics}
+            topicChips={topicChips}
+            setTopicChips={setTopicChips}
+            isGeneratingTopics={isGeneratingTopics}
+            onGenerateTopics={handleGenerateTopics}
+          />
+        );
+      case 6:
+        return (
+          <QueriesStep 
+            newQuery={newQuery}
+            setNewQuery={setNewQuery}
+            queries={queries}
+            setQueries={setQueries}
+            personaChips={personaChips}
+            topicChips={topicChips}
+            isGeneratingQueries={isGeneratingQueries}
+            onGenerateQueries={handleGenerateQueries}
+          />
+        );
+      case 7:
+        return <LaunchStep queries={queries} />;
+      default:
+        return null;
     }
   };
   
@@ -294,345 +230,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
 
         <CardContent>
           <Progress value={getProgressValue()} className="mb-6" />
-          
-          {step === 1 && (
-            <div className="space-y-4 animate-fade-in">
-              <h3 className="text-lg font-medium">What's your brand name?</h3>
-              <Input
-                placeholder="Enter your brand name"
-                value={brandName}
-                onChange={(e) => setBrandName(e.target.value)}
-                className="text-lg"
-              />
-              <p className="text-sm text-muted-foreground">
-                We'll use this to track how your brand appears in AI-generated content.
-              </p>
-            </div>
-          )}
-          
-          {step === 2 && (
-            <div className="space-y-4 animate-fade-in">
-              <h3 className="text-lg font-medium">What industry are you in?</h3>
-              <Input
-                placeholder="e.g. Fashion & Apparel, Technology, Food & Beverage"
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                list="industries"
-              />
-              <datalist id="industries">
-                <option value="Fashion & Apparel" />
-                <option value="Technology" />
-                <option value="Food & Beverage" />
-                <option value="Health & Wellness" />
-                <option value="Finance" />
-                <option value="Travel & Tourism" />
-                <option value="Entertainment" />
-                <option value="Home & Garden" />
-                <option value="Automotive" />
-                <option value="Real Estate" />
-              </datalist>
-              <p className="text-sm text-muted-foreground">
-                This helps us generate relevant queries, topics, and comparison benchmarks.
-              </p>
-            </div>
-          )}
-          
-          {step === 3 && (
-            <div className="space-y-4 animate-fade-in">
-              <h3 className="text-lg font-medium">Add your top competitors</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                We'll track these competitors alongside your brand to show where you're gaining or losing ground in AI answers.
-              </p>
-              
-              <div className="flex space-x-2">
-                <Input
-                  placeholder="Competitor name"
-                  value={newCompetitor}
-                  onChange={(e) => setNewCompetitor(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddCompetitor()}
-                />
-                <Button onClick={handleAddCompetitor}>
-                  <BadgePlus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              
-              {competitors.length > 0 && (
-                <div className="mt-3">
-                  <label className="text-sm font-medium mb-2 block">
-                    Added competitors:
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {competitors.map((competitor, index) => (
-                      <Badge key={index} variant="secondary" className="px-3 py-1">
-                        {competitor}
-                        <button 
-                          className="ml-2 text-muted-foreground hover:text-destructive"
-                          onClick={() => handleRemoveCompetitor(competitor)}
-                        >
-                          ×
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              <p className="text-xs text-muted-foreground mt-4">
-                Optional: You can skip this step and add competitors later.
-              </p>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="space-y-4 animate-fade-in">
-              <h3 className="text-lg font-medium">Who are you trying to reach?</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Tell us the customer types you want AI assistants to influence. These personas help us evaluate your brand's visibility and alignment with user intent.
-              </p>
-              
-              <Textarea
-                placeholder="e.g. Eco-conscious millennials, Budget-conscious families, Sustainable fashion advocates"
-                value={personas}
-                onChange={(e) => setPersonas(e.target.value)}
-                className="min-h-[100px]"
-              />
-              
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  onClick={handleAddPersonaFromText}
-                  disabled={!personas.trim()}
-                >
-                  Add Personas
-                </Button>
-                <Button 
-                  variant="default" 
-                  onClick={handleGeneratePersonas}
-                  disabled={isGeneratingPersonas}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  {isGeneratingPersonas ? "Generating..." : "✨ Suggest Personas with AI"}
-                </Button>
-              </div>
-
-              {personaChips.length > 0 && (
-                <div className="mt-4">
-                  <label className="text-sm font-medium mb-2 block">Your personas:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {personaChips.map((persona, index) => (
-                      <Badge key={index} variant="secondary" className="px-3 py-1">
-                        {persona}
-                        <button 
-                          className="ml-2 text-muted-foreground hover:text-destructive"
-                          onClick={() => removePersonaChip(index)}
-                        >
-                          ×
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {step === 5 && (
-            <div className="space-y-4 animate-fade-in">
-              <h3 className="text-lg font-medium">What topics matter most to your customers?</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                List key categories or content themes your brand wants to show up for in AI search results. These help define your visibility strategy.
-              </p>
-              
-              <Textarea
-                placeholder="e.g. Sustainable fashion, Organic cotton clothing, Ethical manufacturing, Eco-friendly materials"
-                value={topics}
-                onChange={(e) => setTopics(e.target.value)}
-                className="min-h-[100px]"
-              />
-              
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  onClick={handleAddTopicFromText}
-                  disabled={!topics.trim()}
-                >
-                  Add Topics
-                </Button>
-                <Button 
-                  variant="default" 
-                  onClick={handleGenerateTopics}
-                  disabled={isGeneratingTopics}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  {isGeneratingTopics ? "Generating..." : "✨ Suggest Topics with AI"}
-                </Button>
-              </div>
-
-              {topicChips.length > 0 && (
-                <div className="mt-4">
-                  <label className="text-sm font-medium mb-2 block">Your topics:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {topicChips.map((topic, index) => (
-                      <Badge key={index} variant="secondary" className="px-3 py-1">
-                        {topic}
-                        <button 
-                          className="ml-2 text-muted-foreground hover:text-destructive"
-                          onClick={() => removeTopicChip(index)}
-                        >
-                          ×
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {step === 6 && (
-            <div className="space-y-6 animate-fade-in">
-              <div>
-                <h3 className="text-lg font-medium mb-2">What questions do your customers ask AI assistants?</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  These are real or likely questions your audience might ask in tools like ChatGPT or Gemini. We'll use them to test how well your brand shows up in AI-generated answers — and how you compare to competitors.
-                </p>
-              </div>
-
-              <div className="flex gap-2 mb-4">
-                <Input
-                  placeholder="e.g. best sustainable fashion brands for organic cotton"
-                  value={newQuery}
-                  onChange={(e) => setNewQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddQuery()}
-                  className="flex-1"
-                />
-                <Button onClick={handleAddQuery} disabled={!newQuery.trim()}>
-                  <BadgePlus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-
-              <div className="text-center">
-                <Button 
-                  variant="outline" 
-                  onClick={handleGenerateQueries}
-                  disabled={isGeneratingQueries}
-                  className="w-full"
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  {isGeneratingQueries ? "Generating..." : "✨ Generate Queries with AI"}
-                </Button>
-              </div>
-
-              {queries.length > 0 && (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium">Your search queries ({queries.length}):</label>
-                    <p className="text-xs text-muted-foreground">
-                      You can always add or update queries later in the Discovery Dataset tab.
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {queries.map((query) => (
-                      <div key={query.id} className="flex items-center gap-2 p-3 bg-muted/50 rounded-md">
-                        <div className="flex-1 grid grid-cols-4 gap-2 items-center">
-                          <Input
-                            value={query.query}
-                            onChange={(e) => handleUpdateQuery(query.id, 'query', e.target.value)}
-                            className="col-span-2 text-sm"
-                            placeholder="Search query"
-                          />
-                          <Select
-                            value={query.persona}
-                            onValueChange={(value) => handleUpdateQuery(query.id, 'persona', value)}
-                          >
-                            <SelectTrigger className="text-xs">
-                              <SelectValue placeholder="Persona" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {personaChips.map((persona) => (
-                                <SelectItem key={persona} value={persona} className="text-xs">
-                                  {persona}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <Select
-                            value={query.funnelStage}
-                            onValueChange={(value) => handleUpdateQuery(query.id, 'funnelStage', value)}
-                          >
-                            <SelectTrigger className="text-xs">
-                              <SelectValue placeholder="Stage" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {funnelStages.map((stage) => (
-                                <SelectItem key={stage} value={stage} className="text-xs">
-                                  {stage}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => handleRemoveQuery(query.id)}
-                          className="text-muted-foreground hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="bg-blue-50 p-4 rounded-md">
-                <div className="text-sm">
-                  <strong>Example queries:</strong>
-                  <ul className="list-disc list-inside mt-1 text-muted-foreground">
-                    <li>"best sustainable fashion brands for organic cotton"</li>
-                    <li>"Eco Threads vs. Patagonia for eco-friendly clothing"</li>
-                    <li>"affordable ethical clothing brands with fair trade"</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === 7 && (
-            <div className="space-y-6 animate-fade-in">
-              <div>
-                <h3 className="text-lg font-medium mb-2">You're ready to see how your brand performs</h3>
-                <p className="text-sm text-muted-foreground">
-                  We've created a custom Discovery Dataset using your personas, topics, and search queries. Let's test how your brand appears in real AI-generated answers.
-                </p>
-              </div>
-
-              <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Rocket className="h-5 w-5 text-green-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-green-900 mb-1">🚀 Setup Complete!</h4>
-                      <p className="text-sm text-green-800 mb-2">
-                        Your brand was mentioned in 2 out of 3 LLMs for sample queries like "{queries[0]?.query || 'best sustainable fashion brands for organic cotton'}." Let's optimize the rest.
-                      </p>
-                      <div className="flex gap-2 text-xs">
-                        <Badge className="bg-green-100 text-green-800">✅ ChatGPT</Badge>
-                        <Badge className="bg-green-100 text-green-800">✅ Gemini</Badge>
-                        <Badge className="bg-red-100 text-red-800">❌ Perplexity</Badge>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          {renderStep()}
         </CardContent>
 
         <CardFooter className="flex justify-between">
