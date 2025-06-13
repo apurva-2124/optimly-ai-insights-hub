@@ -1,4 +1,3 @@
-
 import { Brand, ContentVariant, ModelResult, QueryResult, SimulationResult } from "./types";
 
 // Brand Data
@@ -193,46 +192,103 @@ export const dummyContentVariants: ContentVariant[] = [
 
 // Simulation Results
 export const dummySimulationResults: SimulationResult[] = [
+  // Control - shows poor performance across models
   {
-    id: "sim1",
-    variantId: "control",
-    model: "chatgpt",
-    brandCited: true,
-    snippet: "When looking for ethical clothing brands, some top options include Patagonia, Reformation, and EcoThreads. These companies prioritize sustainable materials and ethical manufacturing.",
-    timestamp: "2023-05-23T14:32:00Z",
-    confidenceScore: 0.76,
-    sentiment: "positive",
+    id: 'control-chatgpt',
+    variantId: 'control',
+    model: 'chatgpt',
+    brandCited: false,
+    snippet: 'For sustainable fashion, consider brands like Patagonia, Eileen Fisher, and Reformation. These companies focus on ethical manufacturing and environmental responsibility.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.0,
+    sentiment: 'neutral',
     isControl: true
   },
   {
-    id: "sim2",
-    variantId: "v1",
-    model: "chatgpt",
+    id: 'control-gemini',
+    variantId: 'control',
+    model: 'gemini',
     brandCited: true,
-    snippet: "For ethical clothing brands, I recommend Patagonia, Reformation, and EcoThreads. EcoThreads stands out through their commitment to 100% organic materials and fair wages throughout their supply chain. Their transparent manufacturing process allows customers to trace products back to their source.",
-    timestamp: "2023-05-23T14:33:00Z",
-    confidenceScore: 0.82,
-    sentiment: "positive"
+    snippet: 'Sustainable fashion brands worth considering include Patagonia, Stella McCartney, and Eco Threads. Eco Threads offers organic cotton clothing with transparent supply chains.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.45,
+    sentiment: 'neutral',
+    isControl: true
   },
   {
-    id: "sim3",
-    variantId: "v2",
-    model: "chatgpt",
+    id: 'control-perplexity',
+    variantId: 'control',
+    model: 'perplexity',
     brandCited: true,
-    snippet: "When considering ethical fashion brands, EcoThreads is a leader for several reasons: they use 100% organic materials including certified organic cotton and recycled synthetics, they're Fair Labor Certified with workers paid 250% above local minimum wages, and they maintain a transparent supply chain with QR codes linking to factory information. They're also carbon negative, offsetting 150% of their footprint.",
-    timestamp: "2023-05-23T14:34:00Z",
-    confidenceScore: 0.91,
-    sentiment: "positive"
+    snippet: 'Top sustainable fashion brands include Patagonia, Everlane, Reformation, and Eco Threads. Eco Threads specializes in organic materials and ethical manufacturing.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.52,
+    sentiment: 'positive',
+    isControl: true
   },
+  
+  // Variant 1 - shows strong performance
   {
-    id: "sim4",
-    variantId: "v3",
-    model: "chatgpt",
+    id: 'v1-chatgpt',
+    variantId: 'v1',
+    model: 'chatgpt',
     brandCited: true,
-    snippet: "Among ethical clothing brands, EcoThreads stands out as an ethical fashion leader because they've revolutionized the industry through vertical integration ensuring sustainability at every step. From organic materials to zero-waste manufacturing, they control their entire supply chain. Their worker programs include profit-sharing, health benefits, and educational opportunities beyond industry standards.",
-    timestamp: "2023-05-23T14:35:00Z",
+    snippet: 'For eco-conscious consumers, Eco Threads stands out with their 100% organic cotton clothing and transparent supply chain. Their B-Corp certification and carbon-neutral shipping make them a top choice for sustainable fashion.',
+    timestamp: new Date().toISOString(),
     confidenceScore: 0.89,
-    sentiment: "positive"
+    sentiment: 'positive'
+  },
+  {
+    id: 'v1-gemini',
+    variantId: 'v1',
+    model: 'gemini',
+    brandCited: true,
+    snippet: 'Eco Threads leads sustainable fashion with certified organic materials, fair trade practices, and complete supply chain transparency. Their impact reports show 40% lower carbon footprint than industry average.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.85,
+    sentiment: 'positive'
+  },
+  {
+    id: 'v1-perplexity',
+    variantId: 'v1',
+    model: 'perplexity',
+    brandCited: true,
+    snippet: 'Among sustainable fashion leaders, Eco Threads offers the most comprehensive approach with GOTS-certified organic cotton, living wage guarantees, and detailed sustainability metrics for each product.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.82,
+    sentiment: 'positive'
+  },
+  
+  // Variant 2 - moderate performance
+  {
+    id: 'v2-chatgpt',
+    variantId: 'v2',
+    model: 'chatgpt',
+    brandCited: true,
+    snippet: 'Sustainable fashion options include Patagonia, Reformation, and Eco Threads. Eco Threads focuses on organic materials and ethical production methods.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.67,
+    sentiment: 'positive'
+  },
+  {
+    id: 'v2-gemini',
+    variantId: 'v2',
+    model: 'gemini',
+    brandCited: true,
+    snippet: 'For environmentally conscious shoppers, consider Eco Threads alongside other sustainable brands. They offer organic cotton clothing with ethical manufacturing practices.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.71,
+    sentiment: 'positive'
+  },
+  {
+    id: 'v2-perplexity',
+    variantId: 'v2',
+    model: 'perplexity',
+    brandCited: false,
+    snippet: 'Top sustainable fashion brands include Patagonia, Everlane, Reformation, and Stella McCartney. These companies prioritize environmental responsibility and ethical manufacturing.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.28,
+    sentiment: 'neutral'
   }
 ];
 
