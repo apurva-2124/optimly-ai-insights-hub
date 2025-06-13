@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   Card,
@@ -126,10 +127,11 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
     // Simulate AI generation
     setTimeout(() => {
       const generatedPersonas = [
-        "Adventure-seeking retirees",
+        "Eco-conscious millennials",
         "Budget-conscious families", 
-        "Corporate sustainability leads",
-        "Tech-savvy millennials"
+        "Sustainable fashion advocates",
+        "Corporate sustainability managers",
+        "Gen Z ethical shoppers"
       ];
       setPersonaChips(generatedPersonas);
       setIsGeneratingPersonas(false);
@@ -142,11 +144,12 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
     // Simulate AI generation
     setTimeout(() => {
       const generatedTopics = [
-        "Luxury wellness travel",
-        "Small ship cruises",
-        "Arctic expedition cruises", 
-        "Culinary experiences",
-        "Sustainable tourism"
+        "Sustainable fashion",
+        "Organic cotton clothing",
+        "Ethical manufacturing", 
+        "Eco-friendly materials",
+        "Fair trade apparel",
+        "Circular fashion"
       ];
       setTopicChips(generatedTopics);
       setIsGeneratingTopics(false);
@@ -198,37 +201,37 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       const generatedQueries: QueryEntry[] = [
         {
           id: "gen-1",
-          query: "best luxury cruise lines for Arctic expeditions",
-          topic: topicChips[0] || "Arctic expedition cruises",
-          persona: personaChips[0] || "Adventure-seeking retirees",
+          query: "best sustainable fashion brands for organic cotton",
+          topic: topicChips[0] || "Sustainable fashion",
+          persona: personaChips[0] || "Eco-conscious millennials",
           funnelStage: "Awareness"
         },
         {
           id: "gen-2", 
-          query: `${brandName} vs ${competitors[0] || 'competitor'} for world cruises`,
-          topic: topicChips[1] || "Luxury wellness travel",
+          query: `${brandName} vs ${competitors[0] || 'Patagonia'} for eco-friendly clothing`,
+          topic: topicChips[1] || "Ethical manufacturing",
           persona: personaChips[1] || "Budget-conscious families",
           funnelStage: "Consideration"
         },
         {
           id: "gen-3",
-          query: "which cruise lines include butler service and wellness programs",
-          topic: topicChips[2] || "Culinary experiences",
-          persona: personaChips[0] || "Adventure-seeking retirees",
+          query: "affordable ethical clothing brands with transparent supply chains",
+          topic: topicChips[2] || "Fair trade apparel",
+          persona: personaChips[0] || "Eco-conscious millennials",
           funnelStage: "Decision"
         },
         {
           id: "gen-4",
-          query: "small ship cruises with sustainable practices",
-          topic: topicChips[3] || "Sustainable tourism",
-          persona: personaChips[2] || "Corporate sustainability leads",
+          query: "clothing brands using recycled materials and sustainable practices",
+          topic: topicChips[3] || "Eco-friendly materials",
+          persona: personaChips[2] || "Sustainable fashion advocates",
           funnelStage: "Awareness"
         },
         {
           id: "gen-5",
-          query: "luxury cruise dining experiences and celebrity chefs",
-          topic: topicChips[4] || "Culinary experiences",
-          persona: personaChips[3] || "Tech-savvy millennials",
+          query: "organic cotton t-shirts from ethical fashion brands",
+          topic: topicChips[4] || "Organic cotton clothing",
+          persona: personaChips[4] || "Gen Z ethical shoppers",
           funnelStage: "Consideration"
         }
       ];
@@ -389,7 +392,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
               </p>
               
               <Textarea
-                placeholder="e.g. Adventure-seeking retirees, Budget-conscious families, Corporate sustainability leads"
+                placeholder="e.g. Eco-conscious millennials, Budget-conscious families, Sustainable fashion advocates"
                 value={personas}
                 onChange={(e) => setPersonas(e.target.value)}
                 className="min-h-[100px]"
@@ -442,7 +445,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
               </p>
               
               <Textarea
-                placeholder="e.g. Luxury wellness travel, Small ship cruises, Arctic expedition cruises, Culinary experiences"
+                placeholder="e.g. Sustainable fashion, Organic cotton clothing, Ethical manufacturing, Eco-friendly materials"
                 value={topics}
                 onChange={(e) => setTopics(e.target.value)}
                 className="min-h-[100px]"
@@ -498,7 +501,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
 
               <div className="flex gap-2 mb-4">
                 <Input
-                  placeholder="e.g. best luxury cruises to Antarctica"
+                  placeholder="e.g. best sustainable fashion brands for organic cotton"
                   value={newQuery}
                   onChange={(e) => setNewQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddQuery()}
@@ -590,9 +593,9 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
                 <div className="text-sm">
                   <strong>Example queries:</strong>
                   <ul className="list-disc list-inside mt-1 text-muted-foreground">
-                    <li>"best luxury cruises to Antarctica"</li>
-                    <li>"Seabourn vs. Regent for world cruise"</li>
-                    <li>"which cruise lines include butler service"</li>
+                    <li>"best sustainable fashion brands for organic cotton"</li>
+                    <li>"Eco Threads vs. Patagonia for eco-friendly clothing"</li>
+                    <li>"affordable ethical clothing brands with fair trade"</li>
                   </ul>
                 </div>
               </div>
@@ -617,7 +620,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
                     <div>
                       <h4 className="font-medium text-green-900 mb-1">🚀 Setup Complete!</h4>
                       <p className="text-sm text-green-800 mb-2">
-                        Your brand was mentioned in 2 out of 3 LLMs for sample queries like "{queries[0]?.query || 'luxury cruise lines for Antarctica'}." Let's optimize the rest.
+                        Your brand was mentioned in 2 out of 3 LLMs for sample queries like "{queries[0]?.query || 'best sustainable fashion brands for organic cotton'}." Let's optimize the rest.
                       </p>
                       <div className="flex gap-2 text-xs">
                         <Badge className="bg-green-100 text-green-800">✅ ChatGPT</Badge>
