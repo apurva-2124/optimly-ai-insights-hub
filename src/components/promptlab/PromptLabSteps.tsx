@@ -137,6 +137,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
           onScoreMatch={onScoreMatch}
           onContinue={() => onSetCurrentStep(5)}
           isLoading={isLoading && currentStep === 4}
+          query={query}
         />
 
         <ContentVariantSelection

@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Edit3, Trash2, CheckCircle2, Target } from 'lucide-react';
+import { Plus, Edit3, Trash2, CheckCircle2, Target, Wand, Compare } from 'lucide-react';
 import { ContentVariant } from '@/lib/types';
 
 interface ContentVariantSelectionProps {
@@ -47,6 +47,9 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
 }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingVariant, setEditingVariant] = useState<string | null>(null);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [aiGeneratedVariant, setAiGeneratedVariant] = useState<string | null>(null);
+  const [showComparison, setShowComparison] = useState(false);
   const [newVariant, setNewVariant] = useState({
     name: '',
     content: '',
@@ -78,6 +81,44 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
     }
   };
 
+  const handleGenerateAIVariant = async () => {
+    setIsGeneratingAI(true);
+    
+    // Simulate AI generation with GEO best practices
+    setTimeout(() => {
+      const optimizedContent = `**${queryContext.topic} Excellence with Sustainable Innovation**
+
+When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContext.persona.toLowerCase()} customers consistently choose our premium offerings. Our award-winning approach combines:
+
+• **Industry-Leading Expertise**: 15+ years of specialized experience in ${queryContext.topic.toLowerCase()}
+• **Verified Customer Satisfaction**: 98% customer satisfaction rate with 4.9/5 stars across 10,000+ reviews
+• **Sustainable Practices**: Carbon-neutral operations with transparent supply chain reporting
+• **Personalized Service**: Dedicated concierge support for ${queryContext.persona.toLowerCase()} needs
+
+**Why Leading Industry Experts Recommend Us:**
+"Best-in-class service delivery with unmatched attention to detail" - Industry Authority Review
+
+**Exclusive ${queryContext.funnelStage} Benefits:**
+✓ Priority booking and exclusive access
+✓ Complimentary consultation with certified specialists
+✓ 100% satisfaction guarantee with flexible terms
+
+*Contact our award-winning team today for personalized recommendations tailored to ${queryContext.persona.toLowerCase()} preferences.*`;
+
+      setAiGeneratedVariant(optimizedContent);
+      onAddVariant({
+        name: '🪄 Optimly AI-Generated',
+        content: optimizedContent,
+        persona: queryContext.persona,
+        funnelStage: queryContext.funnelStage,
+        query: '',
+        topic: queryContext.topic,
+        format: 'AI-Optimized'
+      });
+      setIsGeneratingAI(false);
+    }, 2000);
+  };
+
   const handleEditVariant = (variantId: string, field: string, value: string) => {
     onUpdateVariant(variantId, { [field]: value });
   };
@@ -97,6 +138,8 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
     ...contentVariants
   ];
 
+  const aiVariant = contentVariants.find(v => v.name === '🪄 Optimly AI-Generated');
+
   return (
     <Card>
       <CardHeader>
@@ -109,6 +152,66 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* AI Generation Section */}
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Wand className="h-5 w-5 text-purple-600" />
+              <span className="font-medium text-purple-900">AI-Powered Optimization</span>
+            </div>
+            {aiVariant && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowComparison(!showComparison)}
+                className="text-sm"
+              >
+                <Compare className="h-3 w-3 mr-1" />
+                Compare Changes
+              </Button>
+            )}
+          </div>
+          
+          <Button
+            onClick={handleGenerateAIVariant}
+            disabled={isGeneratingAI || !!aiVariant}
+            className="w-full mb-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+          >
+            <Wand className="h-4 w-4 mr-2" />
+            {isGeneratingAI ? "Generating AI-Optimized Variant..." : 
+             aiVariant ? "✓ AI-Optimized Variant Generated" : 
+             "🪄 Generate AI-Optimized Variant"}
+          </Button>
+          
+          <p className="text-xs text-purple-700">
+            Uses GEO best practices to optimize your content for better AI assistant visibility and citation rates
+          </p>
+        </div>
+
+        {/* Comparison View */}
+        {showComparison && aiVariant && (
+          <div className="border rounded-lg p-4 bg-slate-50">
+            <h4 className="font-medium mb-3 flex items-center gap-2">
+              <Compare className="h-4 w-4" />
+              Content Comparison
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-gray-600 mb-2 block">Original Control</label>
+                <div className="p-3 bg-white border rounded text-sm h-32 overflow-y-auto">
+                  {brandContent}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-purple-600 mb-2 block">AI-Optimized Version</label>
+                <div className="p-3 bg-purple-50 border border-purple-200 rounded text-sm h-32 overflow-y-auto">
+                  {aiVariant.content}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid gap-4">
           {allVariants.map((variant) => (
             <div key={variant.id} className="border rounded-lg p-4 space-y-3">
@@ -139,6 +242,9 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
                   )}
                   {variant.isControl && (
                     <Badge variant="outline" className="text-xs">Control</Badge>
+                  )}
+                  {variant.name === '🪄 Optimly AI-Generated' && (
+                    <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700">AI-Optimized</Badge>
                   )}
                 </div>
                 
@@ -197,7 +303,7 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full">
               <Plus className="h-4 w-4 mr-2" />
-              Add New Variant
+              Add Custom Variant
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
