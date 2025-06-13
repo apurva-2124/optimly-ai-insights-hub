@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Edit3, Trash2, CheckCircle2, Target, Wand, Compare } from 'lucide-react';
+import { Plus, Edit3, Trash2, CheckCircle2, Target, Wand, GitCompare } from 'lucide-react';
 import { ContentVariant } from '@/lib/types';
 
 interface ContentVariantSelectionProps {
@@ -166,7 +166,7 @@ When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContex
                 onClick={() => setShowComparison(!showComparison)}
                 className="text-sm"
               >
-                <Compare className="h-3 w-3 mr-1" />
+                <GitCompare className="h-3 w-3 mr-1" />
                 Compare Changes
               </Button>
             )}
@@ -192,7 +192,7 @@ When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContex
         {showComparison && aiVariant && (
           <div className="border rounded-lg p-4 bg-slate-50">
             <h4 className="font-medium mb-3 flex items-center gap-2">
-              <Compare className="h-4 w-4" />
+              <GitCompare className="h-4 w-4" />
               Content Comparison
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
