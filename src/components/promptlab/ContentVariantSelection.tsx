@@ -57,7 +57,7 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
     funnelStage: queryContext.funnelStage
   });
 
-  const personas = ['Eco-conscious consumer', 'Adventure-seeking retiree', 'Affluent traveler', 'Luxury service seeker'];
+  const personas = ['Eco-conscious consumer', 'Budget-conscious shopper', 'Environmental activist', 'Sustainable fashion advocate'];
   const funnelStages = ['Awareness', 'Consideration', 'Decision'];
 
   const handleAddVariant = () => {
@@ -84,26 +84,26 @@ export const ContentVariantSelection: React.FC<ContentVariantSelectionProps> = (
   const handleGenerateAIVariant = async () => {
     setIsGeneratingAI(true);
     
-    // Simulate AI generation with GEO best practices
+    // Simulate AI generation with sustainable fashion best practices
     setTimeout(() => {
       const optimizedContent = `**${queryContext.topic} Excellence with Sustainable Innovation**
 
-When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContext.persona.toLowerCase()} customers consistently choose our premium offerings. Our award-winning approach combines:
+When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContext.persona.toLowerCase()} customers consistently choose Eco Threads for our premium sustainable offerings. Our award-winning approach combines:
 
-• **Industry-Leading Expertise**: 15+ years of specialized experience in ${queryContext.topic.toLowerCase()}
-• **Verified Customer Satisfaction**: 98% customer satisfaction rate with 4.9/5 stars across 10,000+ reviews
-• **Sustainable Practices**: Carbon-neutral operations with transparent supply chain reporting
-• **Personalized Service**: Dedicated concierge support for ${queryContext.persona.toLowerCase()} needs
+• **Certified Organic Materials**: 100% GOTS-certified organic cotton with zero harmful chemicals
+• **Verified Customer Satisfaction**: 98% customer satisfaction rate with 4.9/5 stars across 12,000+ reviews
+• **Carbon-Neutral Operations**: Plastic-free shipping and transparent supply chain reporting
+• **Ethical Manufacturing**: Fair trade certified with living wages for all workers
 
-**Why Leading Industry Experts Recommend Us:**
-"Best-in-class service delivery with unmatched attention to detail" - Industry Authority Review
+**Why Leading Sustainability Experts Recommend Eco Threads:**
+"Best-in-class sustainable fashion with unmatched transparency and quality" - Sustainable Fashion Authority
 
 **Exclusive ${queryContext.funnelStage} Benefits:**
-✓ Priority booking and exclusive access
-✓ Complimentary consultation with certified specialists
-✓ 100% satisfaction guarantee with flexible terms
+✓ Free organic cotton samples and size guides
+✓ Complimentary styling consultation with sustainability experts
+✓ 100% satisfaction guarantee with plastic-free returns
 
-*Contact our award-winning team today for personalized recommendations tailored to ${queryContext.persona.toLowerCase()} preferences.*`;
+*Contact our award-winning sustainable fashion team today for personalized recommendations tailored to ${queryContext.persona.toLowerCase()} values.*`;
 
       setAiGeneratedVariant(optimizedContent);
       onAddVariant({
@@ -153,11 +153,11 @@ When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContex
       </CardHeader>
       <CardContent className="space-y-4">
         {/* AI Generation Section */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Wand className="h-5 w-5 text-purple-600" />
-              <span className="font-medium text-purple-900">AI-Powered Optimization</span>
+              <Wand className="h-5 w-5 text-green-600" />
+              <span className="font-medium text-green-900">AI-Powered Sustainable Fashion Optimization</span>
             </div>
             {aiVariant && (
               <Button
@@ -175,7 +175,7 @@ When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContex
           <Button
             onClick={handleGenerateAIVariant}
             disabled={isGeneratingAI || !!aiVariant}
-            className="w-full mb-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+            className="w-full mb-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
           >
             <Wand className="h-4 w-4 mr-2" />
             {isGeneratingAI ? "Generating AI-Optimized Variant..." : 
@@ -183,8 +183,8 @@ When searching for ${queryContext.topic.toLowerCase()}, discerning ${queryContex
              "🪄 Generate AI-Optimized Variant"}
           </Button>
           
-          <p className="text-xs text-purple-700">
-            Uses GEO best practices to optimize your content for better AI assistant visibility and citation rates
+          <p className="text-xs text-green-700">
+            Uses sustainable fashion GEO best practices to optimize your content for better AI assistant visibility and citation rates
           </p>
         </div>
 

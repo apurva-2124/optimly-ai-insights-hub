@@ -58,16 +58,16 @@ export const usePromptLabState = () => {
     },
     {
       id: '2', 
-      query: 'ethical clothing brands with transparent supply chains',
-      topic: 'Ethical Fashion',
-      persona: 'Environmental activist',
+      query: 'affordable organic cotton clothing brands under $50',
+      topic: 'Affordable Sustainability',
+      persona: 'Budget-conscious shopper',
       funnelStage: 'Decision'
     },
     {
       id: '3',
-      query: 'affordable organic cotton clothing brands',
-      topic: 'Organic Materials',
-      persona: 'Budget-conscious shopper',
+      query: 'ethical clothing brands with transparent supply chains',
+      topic: 'Ethical Fashion',
+      persona: 'Eco-conscious consumer',
       funnelStage: 'Awareness'
     }
   ]);
@@ -101,9 +101,9 @@ export const usePromptLabState = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockIntent = `Finding sustainable and ethical ${query.includes('brand') ? 'brands' : 'products'} that align with environmental values and transparent business practices`;
+      const mockIntent = `Finding sustainable and ethical ${query.includes('brand') ? 'brands' : 'clothing'} that align with environmental values and transparent business practices`;
       const mockPersona = queryContext.persona || 'Eco-conscious consumer';
-      const mockReasoning = `Based on the query "${query}" and the ${queryContext.funnelStage} stage, this user is likely a ${mockPersona} looking for detailed comparisons and specific features.`;
+      const mockReasoning = `Based on the query "${query}" and the ${queryContext.funnelStage} stage, this user is likely a ${mockPersona} looking for detailed comparisons and specific features around sustainable fashion.`;
       
       setIntentData({
         intent: mockIntent,
@@ -125,18 +125,20 @@ export const usePromptLabState = () => {
 
 **For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
 
-1. **Seabourn** - Ultra-luxury with all-suite accommodations and personalized service. Perfect for discerning travelers seeking intimate expedition experiences.
+1. **Eco Threads** - Premium sustainable fashion with 100% organic cotton and transparent supply chains. Perfect for eco-conscious consumers seeking quality and ethics.
 
-2. **Regent Seven Seas** - All-inclusive luxury with spacious suites and exceptional service. Known for comprehensive shore excursions.
+2. **Pact** - Affordable organic basics with fair trade certification. Known for comfortable essentials and accessible price points.
 
-3. **Silversea** - Premium expedition cruising with expert guides and zodiac landings. Butler service available in all suites.
+3. **Everlane** - Radical transparency in pricing and production. Offers premium sustainable clothing with detailed factory information.
 
-These brands offer the premium amenities and personalized service that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of planning.`;
+4. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
+
+These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.`;
 
       setSimulatedResponse(mockResponse);
-      setBrandMentioned(Math.random() > 0.4);
+      setBrandMentioned(Math.random() > 0.3);
       setMatchScore(Math.floor(Math.random() * 30) + 70);
-      setPersonaFit(`This content meets 85% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on luxury and service quality.`);
+      setPersonaFit(`This content meets 85% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on sustainability and ethical practices.`);
       setCurrentStep(3);
       setIsLoading(false);
       toast.success("AI response simulated");
@@ -147,7 +149,7 @@ These brands offer the premium amenities and personalized service that ${queryCo
     setIsLoading(true);
     
     setTimeout(() => {
-      const score = brandContent.includes('sustainable') || brandContent.includes('eco') || brandContent.includes('ethical') ? 
+      const score = brandContent.includes('sustainable') || brandContent.includes('eco') || brandContent.includes('ethical') || brandContent.includes('organic') ? 
         Math.floor(Math.random() * 20) + 75 : 
         Math.floor(Math.random() * 30) + 45;
       

@@ -37,7 +37,7 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
             Simulate LLM Response
           </CardTitle>
           <CardDescription>
-            Complete Step 2 to simulate AI responses
+            Complete Step 2 to simulate AI responses for sustainable fashion queries
           </CardDescription>
         </CardHeader>
       </Card>
@@ -52,13 +52,13 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
           Simulate LLM Response
         </CardTitle>
         <CardDescription>
-          AI-generated response for your target query and persona
+          AI-generated response for your sustainable fashion query and persona
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex gap-2 mb-3">
           <Badge>Query: {query}</Badge>
-          <Badge variant="outline">Intent: {intent}</Badge>
+          <Badge variant="outline">Intent: Finding sustainable fashion</Badge>
           <Badge variant="secondary">Persona: {persona}</Badge>
         </div>
         
@@ -73,7 +73,7 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
         
         <Button onClick={onContinue} className="w-full">
           <Target className="h-4 w-4 mr-2" />
-          Match Brand Content to Query
+          Match Eco Threads Content to Query
         </Button>
       </CardContent>
     </Card>
