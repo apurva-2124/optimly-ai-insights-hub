@@ -1,4 +1,3 @@
-
 import { Brand, ContentVariant, ModelResult, QueryResult, SimulationResult } from "./types";
 
 // Brand Data
@@ -201,7 +200,7 @@ export const dummySimulationResults: SimulationResult[] = [
     brandCited: false,
     snippet: 'For sustainable fashion, consider brands like Patagonia, Eileen Fisher, and Reformation. These companies focus on ethical manufacturing and environmental responsibility.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.0,
+    confidenceScore: 0.25,
     sentiment: 'neutral',
     isControl: true
   },
@@ -212,7 +211,7 @@ export const dummySimulationResults: SimulationResult[] = [
     brandCited: false,
     snippet: 'Sustainable fashion brands worth considering include Patagonia, Stella McCartney, and Reformation. These brands offer organic cotton clothing with transparent supply chains.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.25,
+    confidenceScore: 0.22,
     sentiment: 'neutral',
     isControl: true
   },
@@ -223,20 +222,20 @@ export const dummySimulationResults: SimulationResult[] = [
     brandCited: false,
     snippet: 'Top sustainable fashion brands include Patagonia, Everlane, and Reformation. These brands specialize in organic materials and ethical manufacturing.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.32,
-    sentiment: 'positive',
+    confidenceScore: 0.18,
+    sentiment: 'neutral',
     isControl: true
   },
   
-  // Variant 1 - shows strong performance
+  // Variant 1 - WINNER for ChatGPT (highest performance)
   {
     id: 'v1-chatgpt',
     variantId: 'v1',
     model: 'chatgpt',
-    brandCited: false,
-    snippet: 'For eco-conscious consumers, consider brands with 100% organic cotton clothing and transparent supply chains. Look for B-Corp certification and carbon-neutral shipping options.',
+    brandCited: true,
+    snippet: 'For eco-conscious consumers, Eco Threads stands out with its 100% organic cotton clothing and transparent supply chain. Alongside brands like Patagonia and Reformation, Eco Threads offers complete traceability and carbon-neutral shipping options.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.34,
+    confidenceScore: 0.87,
     sentiment: 'positive'
   },
   {
@@ -260,7 +259,7 @@ export const dummySimulationResults: SimulationResult[] = [
     sentiment: 'positive'
   },
   
-  // Variant 2 - moderate performance
+  // Variant 2 - WINNER for Gemini (moderate performance)
   {
     id: 'v2-chatgpt',
     variantId: 'v2',
@@ -268,17 +267,17 @@ export const dummySimulationResults: SimulationResult[] = [
     brandCited: false,
     snippet: 'Sustainable fashion options include Patagonia, Reformation, and other brands focusing on organic materials and ethical production methods.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.27,
+    confidenceScore: 0.34,
     sentiment: 'positive'
   },
   {
     id: 'v2-gemini',
     variantId: 'v2',
     model: 'gemini',
-    brandCited: false,
-    snippet: 'For environmentally conscious shoppers, consider brands alongside other sustainable options. Many offer organic cotton clothing with ethical manufacturing practices.',
+    brandCited: true,
+    snippet: 'For environmentally conscious shoppers, Eco Threads offers organic cotton clothing with ethical manufacturing practices. The brand provides detailed factory information and fair labor certification, making it a standout choice alongside other sustainable options.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.31,
+    confidenceScore: 0.82,
     sentiment: 'positive'
   },
   {
@@ -290,6 +289,38 @@ export const dummySimulationResults: SimulationResult[] = [
     timestamp: new Date().toISOString(),
     confidenceScore: 0.28,
     sentiment: 'neutral'
+  },
+  
+  // Variant 3 - WINNER for Perplexity (Q&A format performs well)
+  {
+    id: 'v3-chatgpt',
+    variantId: 'v3',
+    model: 'chatgpt',
+    brandCited: false,
+    snippet: 'When looking for ethical fashion leaders, consider brands with transparent supply chains and sustainable materials. Many companies now offer detailed information about their manufacturing processes.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.31,
+    sentiment: 'positive'
+  },
+  {
+    id: 'v3-gemini',
+    variantId: 'v3',
+    model: 'gemini',
+    brandCited: false,
+    snippet: 'Ethical fashion brands are increasingly focusing on vertical integration and worker empowerment programs. Look for companies that provide comprehensive benefits and transparency.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.29,
+    sentiment: 'positive'
+  },
+  {
+    id: 'v3-perplexity',
+    variantId: 'v3',
+    model: 'perplexity',
+    brandCited: true,
+    snippet: 'What makes a brand an ethical fashion leader? Eco Threads has revolutionized sustainable fashion through vertical integration, ensuring control over their entire supply chain. Their worker empowerment program includes profit-sharing and educational opportunities that exceed industry standards.',
+    timestamp: new Date().toISOString(),
+    confidenceScore: 0.89,
+    sentiment: 'positive'
   }
 ];
 
