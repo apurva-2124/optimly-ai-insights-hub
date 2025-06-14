@@ -37,7 +37,7 @@ export const ExportWinnersSection: React.FC<ExportWinnersSectionProps> = ({
 
   const handleDownload = () => {
     if (winningResult && winningVariant) {
-      const content = `Winning Content Variant\n\nVariant: ${winningVariant.name}\nFormat: ${winningVariant.format}\nScore: ${winningResult.score}%\n\nContent:\n${winningVariant.content}`;
+      const content = `Winning Content Variant\n\nVariant: ${winningVariant.name}\nFormat: ${winningVariant.format}\nScore: ${Math.round(winningResult.confidenceScore * 100)}%\n\nContent:\n${winningVariant.content}`;
       const blob = new Blob([content], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -82,7 +82,7 @@ export const ExportWinnersSection: React.FC<ExportWinnersSectionProps> = ({
                 <Badge>{winningVariant.format}</Badge>
               </div>
               <div className="text-2xl font-bold text-green-600">
-                {winningResult.score}% Average Score
+                {Math.round(winningResult.confidenceScore * 100)}% Average Score
               </div>
               <p className="text-sm text-gray-600">
                 Performed best across {Object.keys(modelWinners).length} AI assistants
@@ -96,7 +96,7 @@ export const ExportWinnersSection: React.FC<ExportWinnersSectionProps> = ({
               {results.filter(r => r.variantId === winningVariant.id).map(result => (
                 <div key={result.model} className="flex justify-between text-sm">
                   <span className="capitalize">{result.model}:</span>
-                  <span className="font-medium">{result.score}%</span>
+                  <span className="font-medium">{Math.round(result.confidenceScore * 100)}%</span>
                 </div>
               ))}
             </div>
