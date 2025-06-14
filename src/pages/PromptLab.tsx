@@ -39,7 +39,8 @@ const PromptLab = () => {
     handleAddVariant,
     handleUpdateVariant,
     handleDeleteVariant,
-    handleToggleVariant
+    handleToggleVariant,
+    handleGenerateOptimizedVariant
   } = usePromptLabState();
   
   const stepLabels = [
@@ -101,6 +102,7 @@ const PromptLab = () => {
             onUpdateVariant={handleUpdateVariant}
             onDeleteVariant={handleDeleteVariant}
             onToggleVariant={handleToggleVariant}
+            onGenerateOptimizedVariant={handleGenerateOptimizedVariant}
           />
         </div>
       </MainDashboardLayout>

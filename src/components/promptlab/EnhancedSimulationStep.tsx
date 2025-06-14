@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, AlertTriangle, Target } from 'lucide-react';
+import { CheckCircle, XCircle, Target, Wrench } from 'lucide-react';
 
 interface EnhancedSimulationStepProps {
   simulatedResponse: string | null;
@@ -21,6 +21,7 @@ interface EnhancedSimulationStepProps {
   query: string;
   persona: string;
   funnelStage: string;
+  onGenerateOptimizedVariant?: () => void;
 }
 
 export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
@@ -32,8 +33,30 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
   isLoading = false,
   query,
   persona,
-  funnelStage
+  funnelStage,
+  onGenerateOptimizedVariant
 }) => {
+  const detectBrandMention = (response: string): boolean => {
+    if (!response) return false;
+    
+    const brandVariants = [
+      'Eco Threads',
+      'eco-threads', 
+      'EcoThreads',
+      'eco threads',
+      'ECOTHREADS'
+    ];
+    
+    const lowerResponse = response.toLowerCase();
+    return brandVariants.some(variant => 
+      lowerResponse.includes(variant.toLowerCase())
+    );
+  };
+
+  // Use actual brand detection instead of the legacy brandMentioned prop
+  const isBrandMentioned = simulatedResponse ? detectBrandMention(simulatedResponse) : false;
+  const needsOptimization = !isBrandMentioned && matchScore !== null && matchScore >= 80;
+
   if (!simulatedResponse) {
     return (
       <Card className="opacity-50">
@@ -50,24 +73,6 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
     );
   }
 
-  const getBrandStatusIcon = () => {
-    if (brandMentioned === true) return <CheckCircle className="h-4 w-4 text-green-500" />;
-    if (brandMentioned === false) return <XCircle className="h-4 w-4 text-red-500" />;
-    return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-  };
-
-  const getBrandStatusText = () => {
-    if (brandMentioned === true) return "Brand Mentioned";
-    if (brandMentioned === false) return "Brand Not Mentioned";
-    return "Competitors Mentioned";
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600 bg-green-50 border-green-200";
-    if (score >= 60) return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    return "text-red-600 bg-red-50 border-red-200";
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -82,13 +87,28 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
       <CardContent className="space-y-4">
         <div className="flex gap-3 mb-4">
           <div className="flex items-center gap-2">
-            {getBrandStatusIcon()}
-            <span className="text-sm font-medium">{getBrandStatusText()}</span>
+            {isBrandMentioned ? (
+              <>
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium text-green-700">Brand Mentioned</span>
+              </>
+            ) : (
+              <>
+                <XCircle className="h-4 w-4 text-red-500" />
+                <span className="text-sm font-medium text-red-700">Brand Not Mentioned</span>
+              </>
+            )}
           </div>
           
           {matchScore !== null && (
-            <div className={`px-2 py-1 rounded-md border text-sm font-medium ${getScoreColor(matchScore)}`}>
-              {matchScore}% Match
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">{matchScore}% Match Score</Badge>
+              {needsOptimization && (
+                <div className="flex items-center gap-1 text-orange-600">
+                  <Wrench className="h-3 w-3" />
+                  <span className="text-xs font-medium">Optimization Needed</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -111,10 +131,23 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
           </div>
         )}
         
-        <Button onClick={onContinue} className="w-full">
-          <Target className="h-4 w-4 mr-2" />
-          Test Your Brand Content
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={onContinue} className="flex-1">
+            <Target className="h-4 w-4 mr-2" />
+            Test Your Brand Content
+          </Button>
+          
+          {needsOptimization && onGenerateOptimizedVariant && (
+            <Button 
+              onClick={onGenerateOptimizedVariant} 
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Wrench className="h-4 w-4" />
+              Generate Optimized Variant
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

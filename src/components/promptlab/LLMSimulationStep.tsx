@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Target } from 'lucide-react';
+import { MessageSquare, Target, Wrench, CheckCircle, XCircle } from 'lucide-react';
 
 interface LLMSimulationStepProps {
   simulatedResponse: string | null;
@@ -18,6 +18,8 @@ interface LLMSimulationStepProps {
   query: string;
   intent: string;
   persona: string;
+  matchScore?: number | null;
+  onGenerateOptimizedVariant?: () => void;
 }
 
 export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
@@ -26,8 +28,30 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
   isLoading = false,
   query,
   intent,
-  persona
+  persona,
+  matchScore,
+  onGenerateOptimizedVariant
 }) => {
+  const detectBrandMention = (response: string): boolean => {
+    if (!response) return false;
+    
+    const brandVariants = [
+      'Eco Threads',
+      'eco-threads', 
+      'EcoThreads',
+      'eco threads',
+      'ECOTHREADS'
+    ];
+    
+    const lowerResponse = response.toLowerCase();
+    return brandVariants.some(variant => 
+      lowerResponse.includes(variant.toLowerCase())
+    );
+  };
+
+  const isBrandMentioned = simulatedResponse ? detectBrandMention(simulatedResponse) : false;
+  const needsOptimization = !isBrandMentioned && matchScore !== null && matchScore >= 80;
+
   if (!simulatedResponse) {
     return (
       <Card className="opacity-50">
@@ -58,8 +82,36 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
       <CardContent className="space-y-4">
         <div className="flex gap-2 mb-3">
           <Badge>Query: {query}</Badge>
-          <Badge variant="outline">Intent: Finding sustainable fashion</Badge>
+          <Badge variant="outline">Intent: {intent}</Badge>
           <Badge variant="secondary">Persona: {persona}</Badge>
+        </div>
+        
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            {isBrandMentioned ? (
+              <>
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium text-green-700">Brand Mentioned</span>
+              </>
+            ) : (
+              <>
+                <XCircle className="h-4 w-4 text-red-500" />
+                <span className="text-sm font-medium text-red-700">Brand Not Mentioned</span>
+              </>
+            )}
+          </div>
+          
+          {matchScore !== null && (
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">{matchScore}% Match Score</Badge>
+              {needsOptimization && (
+                <div className="flex items-center gap-1 text-orange-600">
+                  <Wrench className="h-3 w-3" />
+                  <span className="text-xs font-medium">Optimization Needed</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         
         <div>
@@ -71,10 +123,23 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
           </div>
         </div>
         
-        <Button onClick={onContinue} className="w-full">
-          <Target className="h-4 w-4 mr-2" />
-          Match Eco Threads Content to Query
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={onContinue} className="flex-1">
+            <Target className="h-4 w-4 mr-2" />
+            Match Eco Threads Content to Query
+          </Button>
+          
+          {needsOptimization && onGenerateOptimizedVariant && (
+            <Button 
+              onClick={onGenerateOptimizedVariant} 
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Wrench className="h-4 w-4" />
+              Generate Optimized Variant
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ContentVariant, QueryResult, SimulationResult } from '@/lib/types';
@@ -69,6 +68,20 @@ export const usePromptLabState = () => {
       topic: 'Ethical Fashion',
       persona: 'Eco-conscious consumer',
       funnelStage: 'Awareness'
+    },
+    {
+      id: '4',
+      query: 'plastic-free packaging sustainable clothing brands',
+      topic: 'Eco-friendly Packaging',
+      persona: 'Eco-conscious consumer',
+      funnelStage: 'Research'
+    },
+    {
+      id: '5',
+      query: 'fair trade organic cotton t-shirts women',
+      topic: 'Fair Trade Fashion',
+      persona: 'Budget-conscious shopper',
+      funnelStage: 'Decision'
     }
   ]);
 
@@ -121,7 +134,11 @@ export const usePromptLabState = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockResponse = `Based on your search for "${query}", here are some top recommendations:
+      // Generate response that sometimes excludes Eco Threads to test optimization
+      const includeEcoThreads = Math.random() > 0.4;
+      
+      const mockResponse = includeEcoThreads ? 
+        `Based on your search for "${query}", here are some top recommendations:
 
 **For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
 
@@ -133,16 +150,37 @@ export const usePromptLabState = () => {
 
 4. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
 
+These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.` :
+        `Based on your search for "${query}", here are some top recommendations:
+
+**For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
+
+1. **Pact** - Affordable organic basics with fair trade certification. Known for comfortable essentials and accessible price points.
+
+2. **Everlane** - Radical transparency in pricing and production. Offers premium sustainable clothing with detailed factory information.
+
+3. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
+
+4. **Patagonia** - Environmental activism meets high-quality outdoor wear. Strong commitment to sustainable materials and repair programs.
+
 These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.`;
 
       setSimulatedResponse(mockResponse);
-      setBrandMentioned(Math.random() > 0.3);
-      setMatchScore(Math.floor(Math.random() * 30) + 70);
-      setPersonaFit(`This content meets 85% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on sustainability and ethical practices.`);
+      
+      // Set a high match score to potentially trigger optimization
+      const score = Math.floor(Math.random() * 30) + 75;
+      setMatchScore(score);
+      setPersonaFit(`This content meets ${85 + Math.floor(Math.random() * 10)}% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on sustainability and ethical practices.`);
       setCurrentStep(3);
       setIsLoading(false);
       toast.success("AI response simulated");
     }, 2000);
+  };
+
+  const handleGenerateOptimizedVariant = () => {
+    toast.success("Generating optimized variant to improve brand visibility");
+    // This could navigate to variant creation or trigger optimization logic
+    setCurrentStep(5); // Go to variant selection step
   };
 
   const handleScoreMatch = async () => {
@@ -265,6 +303,7 @@ These brands offer the sustainable materials and ethical practices that ${queryC
     handleAddVariant,
     handleUpdateVariant,
     handleDeleteVariant,
-    handleToggleVariant
+    handleToggleVariant,
+    handleGenerateOptimizedVariant
   };
 };
