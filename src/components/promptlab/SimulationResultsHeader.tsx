@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { 
@@ -8,12 +7,12 @@ import {
 } from 'lucide-react';
 import { toast } from "sonner";
 // Removed MarketoIntegration import
-import { SimulationResult, ModelWinners } from '@/lib/types';
+import { SimulationResult, ModelWinners, ContentVariant } from '@/lib/types';
 
 interface SimulationResultsHeaderProps {
   results: SimulationResult[];
   modelWinners: ModelWinners;
-  contentVariants: Array<{ id: string; name: string; content: string; }>;
+  contentVariants: ContentVariant[];
 }
 
 export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = ({
@@ -163,4 +162,3 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
     </div>
   );
 };
-
