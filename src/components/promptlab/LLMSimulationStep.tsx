@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Target, Wrench, CheckCircle, XCircle } from 'lucide-react';
+import { MatchScoreIndicator } from './MatchScoreIndicator';
 
 interface LLMSimulationStepProps {
   simulatedResponse: string | null;
@@ -86,7 +87,7 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
           <Badge variant="secondary">Persona: {persona}</Badge>
         </div>
         
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
           <div className="flex items-center gap-2">
             {isBrandMentioned ? (
               <>
@@ -102,14 +103,16 @@ export const LLMSimulationStep: React.FC<LLMSimulationStepProps> = ({
           </div>
           
           {matchScore !== null && (
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">{matchScore}% Match Score</Badge>
-              {needsOptimization && (
-                <div className="flex items-center gap-1 text-orange-600">
-                  <Wrench className="h-3 w-3" />
-                  <span className="text-xs font-medium">Optimization Needed</span>
-                </div>
-              )}
+            <MatchScoreIndicator 
+              score={matchScore} 
+              showBreakdown={true}
+            />
+          )}
+          
+          {needsOptimization && (
+            <div className="flex items-center gap-1 text-orange-600">
+              <Wrench className="h-3 w-3" />
+              <span className="text-xs font-medium">Optimization Needed</span>
             </div>
           )}
         </div>

@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, Target, Wrench } from 'lucide-react';
+import { MatchScoreIndicator } from './MatchScoreIndicator';
 
 interface EnhancedSimulationStepProps {
   simulatedResponse: string | null;
@@ -85,7 +86,7 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex gap-3 mb-4">
+        <div className="flex flex-wrap gap-3 mb-4">
           <div className="flex items-center gap-2">
             {isBrandMentioned ? (
               <>
@@ -101,14 +102,16 @@ export const EnhancedSimulationStep: React.FC<EnhancedSimulationStepProps> = ({
           </div>
           
           {matchScore !== null && (
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">{matchScore}% Match Score</Badge>
-              {needsOptimization && (
-                <div className="flex items-center gap-1 text-orange-600">
-                  <Wrench className="h-3 w-3" />
-                  <span className="text-xs font-medium">Optimization Needed</span>
-                </div>
-              )}
+            <MatchScoreIndicator 
+              score={matchScore} 
+              showBreakdown={true}
+            />
+          )}
+          
+          {needsOptimization && (
+            <div className="flex items-center gap-1 text-orange-600">
+              <Wrench className="h-3 w-3" />
+              <span className="text-xs font-medium">Optimization Needed</span>
             </div>
           )}
         </div>
