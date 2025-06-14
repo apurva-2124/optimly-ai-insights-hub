@@ -1,34 +1,20 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ContentVariant, QueryResult, SimulationResult } from '@/lib/types';
 import { dummySimulationResults } from '@/lib/dummy-data';
 import { toast } from 'sonner';
-
-interface IntentData {
-  intent: string;
-  persona: string;
-  reasoning: string;
-}
-
-interface MatchResult {
-  score: number;
-  explanation: string;
-}
-
-interface DiscoveryQuery {
-  id: string;
-  query: string;
-  topic: string;
-  persona: string;
-  funnelStage: string;
-}
+import { useDiscoveryQueries } from './promptlab/useDiscoveryQueries';
+import { useSimulationHandlers } from './promptlab/useSimulationHandlers';
+import { useContentVariants } from './promptlab/useContentVariants';
+import { IntentData, MatchResult, QueryContext } from './promptlab/types';
 
 export const usePromptLabState = () => {
   const location = useLocation();
   
   const [currentStep, setCurrentStep] = useState(1);
   const [query, setQuery] = useState('');
-  const [queryContext, setQueryContext] = useState({
+  const [queryContext, setQueryContext] = useState<QueryContext>({
     topic: '',
     persona: '',
     funnelStage: ''
@@ -42,48 +28,32 @@ export const usePromptLabState = () => {
   const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
   const [selectedModels, setSelectedModels] = useState<string[]>(['chatgpt', 'gemini', 'perplexity']);
   const [simulationResults, setSimulationResults] = useState<SimulationResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [simulationComplete, setSimulationComplete] = useState(false);
-  const [contentVariants, setContentVariants] = useState<ContentVariant[]>([]);
-  const [selectedVariants, setSelectedVariants] = useState<string[]>(['control']);
+
+  const { discoveryQueries } = useDiscoveryQueries();
+  const { 
+    contentVariants, 
+    selectedVariants, 
+    setContentVariants, 
+    setSelectedVariants,
+    handleAddVariant, 
+    handleUpdateVariant, 
+    handleDeleteVariant, 
+    handleToggleVariant 
+  } = useContentVariants();
   
-  const [discoveryQueries] = useState<DiscoveryQuery[]>([
-    {
-      id: '1',
-      query: 'best sustainable fashion brands for eco-conscious consumers',
-      topic: 'Sustainable Fashion',
-      persona: 'Eco-conscious consumer',
-      funnelStage: 'Consideration'
-    },
-    {
-      id: '2', 
-      query: 'affordable organic cotton clothing brands under $50',
-      topic: 'Affordable Sustainability',
-      persona: 'Budget-conscious shopper',
-      funnelStage: 'Decision'
-    },
-    {
-      id: '3',
-      query: 'ethical clothing brands with transparent supply chains',
-      topic: 'Ethical Fashion',
-      persona: 'Eco-conscious consumer',
-      funnelStage: 'Awareness'
-    },
-    {
-      id: '4',
-      query: 'plastic-free packaging sustainable clothing brands',
-      topic: 'Eco-friendly Packaging',
-      persona: 'Eco-conscious consumer',
-      funnelStage: 'Research'
-    },
-    {
-      id: '5',
-      query: 'fair trade organic cotton t-shirts women',
-      topic: 'Fair Trade Fashion',
-      persona: 'Budget-conscious shopper',
-      funnelStage: 'Decision'
-    }
-  ]);
+  const { 
+    isLoading, 
+    handleDetectIntent, 
+    handleSimulateLLM 
+  } = useSimulationHandlers(
+    queryContext,
+    setCurrentStep,
+    setIntentData,
+    setSimulatedResponse,
+    setMatchScore,
+    setPersonaFit
+  );
 
   useEffect(() => {
     if (location.state?.variants && location.state?.query) {
@@ -95,7 +65,7 @@ export const usePromptLabState = () => {
         setContentVariants(variants.slice(1));
       }
     }
-  }, [location.state]);
+  }, [location.state, setContentVariants]);
   
   const handleQuerySelect = (selectedQuery: string) => {
     setQuery(selectedQuery);
@@ -110,96 +80,23 @@ export const usePromptLabState = () => {
     }
   };
 
-  const handleDetectIntent = async () => {
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      const mockIntent = `Finding sustainable and ethical ${query.includes('brand') ? 'brands' : 'clothing'} that align with environmental values and transparent business practices`;
-      const mockPersona = queryContext.persona || 'Eco-conscious consumer';
-      const mockReasoning = `Based on the query "${query}" and the ${queryContext.funnelStage} stage, this user is likely a ${mockPersona} looking for detailed comparisons and specific features around sustainable fashion.`;
-      
-      setIntentData({
-        intent: mockIntent,
-        persona: mockPersona,
-        reasoning: mockReasoning
-      });
-      
-      setCurrentStep(2);
-      setIsLoading(false);
-      toast.success("Query context analyzed");
-    }, 1500);
-  };
-
-  const handleSimulateLLM = async () => {
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      // Generate response that sometimes excludes Eco Threads to test optimization
-      const includeEcoThreads = Math.random() > 0.4;
-      
-      const mockResponse = includeEcoThreads ? 
-        `Based on your search for "${query}", here are some top recommendations:
-
-**For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
-
-1. **Eco Threads** - Premium sustainable fashion with 100% organic cotton and transparent supply chains. Perfect for eco-conscious consumers seeking quality and ethics.
-
-2. **Pact** - Affordable organic basics with fair trade certification. Known for comfortable essentials and accessible price points.
-
-3. **Everlane** - Radical transparency in pricing and production. Offers premium sustainable clothing with detailed factory information.
-
-4. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
-
-These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.` :
-        `Based on your search for "${query}", here are some top recommendations:
-
-**For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
-
-1. **Pact** - Affordable organic basics with fair trade certification. Known for comfortable essentials and accessible price points.
-
-2. **Everlane** - Radical transparency in pricing and production. Offers premium sustainable clothing with detailed factory information.
-
-3. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
-
-4. **Patagonia** - Environmental activism meets high-quality outdoor wear. Strong commitment to sustainable materials and repair programs.
-
-These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.`;
-
-      setSimulatedResponse(mockResponse);
-      
-      // Set a high match score to potentially trigger optimization
-      const score = Math.floor(Math.random() * 30) + 75;
-      setMatchScore(score);
-      setPersonaFit(`This content meets ${85 + Math.floor(Math.random() * 10)}% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on sustainability and ethical practices.`);
-      setCurrentStep(3);
-      setIsLoading(false);
-      toast.success("AI response simulated");
-    }, 2000);
-  };
-
   const handleGenerateOptimizedVariant = () => {
     toast.success("Generating optimized variant to improve brand visibility");
-    // This could navigate to variant creation or trigger optimization logic
     setCurrentStep(5); // Go to variant selection step
   };
 
   const handleScoreMatch = async () => {
-    setIsLoading(true);
+    const score = brandContent.includes('sustainable') || brandContent.includes('eco') || brandContent.includes('ethical') || brandContent.includes('organic') ? 
+      Math.floor(Math.random() * 20) + 75 : 
+      Math.floor(Math.random() * 30) + 45;
     
-    setTimeout(() => {
-      const score = brandContent.includes('sustainable') || brandContent.includes('eco') || brandContent.includes('ethical') || brandContent.includes('organic') ? 
-        Math.floor(Math.random() * 20) + 75 : 
-        Math.floor(Math.random() * 30) + 45;
-      
-      const explanation = score >= 75 ? 
-        "Strong alignment with user intent. Content includes relevant sustainability keywords, transparency messaging, and addresses eco-conscious concerns. Clear value proposition for environmentally-minded consumers." :
-        "Moderate alignment with query intent. Content could benefit from more specific sustainability claims, third-party certifications, and transparency about manufacturing processes to better match user expectations.";
-      
-      setMatchResult({ score, explanation });
-      setCurrentStep(4);
-      setIsLoading(false);
-      toast.success("Content match scored");
-    }, 1000);
+    const explanation = score >= 75 ? 
+      "Strong alignment with user intent. Content includes relevant sustainability keywords, transparency messaging, and addresses eco-conscious concerns. Clear value proposition for environmentally-minded consumers." :
+      "Moderate alignment with query intent. Content could benefit from more specific sustainability claims, third-party certifications, and transparency about manufacturing processes to better match user expectations.";
+    
+    setMatchResult({ score, explanation });
+    setCurrentStep(4);
+    toast.success("Content match scored");
   };
 
   const handleModelToggle = (model: string) => {
@@ -211,7 +108,6 @@ These brands offer the sustainable materials and ethical practices that ${queryC
   };
 
   const handleRunSimulation = async () => {
-    setIsLoading(true);
     setCurrentStep(6);
     
     setTimeout(() => {
@@ -221,7 +117,6 @@ These brands offer the sustainable materials and ethical practices that ${queryC
       
       setSimulationResults(results);
       setSimulationComplete(true);
-      setIsLoading(false);
       toast.success("Simulation completed across all selected models");
     }, 3000);
   };
@@ -229,48 +124,6 @@ These brands offer the sustainable materials and ethical practices that ${queryC
   const handleSelectWinner = (result: SimulationResult) => {
     console.log("Selected winner:", result);
     toast.success("Winner selected!");
-  };
-
-  const handleAddVariant = (variant: Omit<ContentVariant, 'id'>) => {
-    const newVariant: ContentVariant = {
-      ...variant,
-      id: `variant-${Date.now()}`
-    };
-    setContentVariants(prev => [...prev, newVariant]);
-    setSelectedVariants(prev => [...prev, newVariant.id]);
-    toast.success("Variant added");
-  };
-
-  const handleUpdateVariant = (id: string, updates: Partial<ContentVariant>) => {
-    setContentVariants(prev => 
-      prev.map(variant => 
-        variant.id === id ? { ...variant, ...updates } : variant
-      )
-    );
-  };
-
-  const handleDeleteVariant = (id: string) => {
-    setContentVariants(prev => prev.filter(variant => variant.id !== id));
-    setSelectedVariants(prev => prev.filter(variantId => variantId !== id));
-    toast.success("Variant deleted");
-  };
-
-  const handleToggleVariant = (id: string) => {
-    setSelectedVariants(prev => {
-      if (id === 'control') {
-        // Control cannot be deselected if it's the only one
-        if (prev.includes('control') && prev.length === 1) {
-          return prev;
-        }
-        return prev.includes('control') 
-          ? prev.filter(variantId => variantId !== 'control')
-          : [...prev, 'control'];
-      }
-      
-      return prev.includes(id)
-        ? prev.filter(variantId => variantId !== id)
-        : [...prev, id];
-    });
   };
 
   return {

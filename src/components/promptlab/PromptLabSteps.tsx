@@ -48,6 +48,7 @@ interface PromptLabStepsProps {
   onUpdateVariant: (id: string, variant: Partial<ContentVariant>) => void;
   onDeleteVariant: (id: string) => void;
   onToggleVariant: (id: string) => void;
+  onGenerateOptimizedVariant: () => void;
 }
 
 export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
@@ -82,7 +83,8 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
   onAddVariant,
   onUpdateVariant,
   onDeleteVariant,
-  onToggleVariant
+  onToggleVariant,
+  onGenerateOptimizedVariant
 }) => {
   return (
     <div className="space-y-6">
@@ -128,6 +130,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
           query={query}
           persona={queryContext.persona}
           funnelStage={queryContext.funnelStage}
+          onGenerateOptimizedVariant={onGenerateOptimizedVariant}
         />
 
         <ContentMatchStep
