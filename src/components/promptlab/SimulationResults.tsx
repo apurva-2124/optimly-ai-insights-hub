@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { SimulationResult } from '@/lib/types';
+import { SimulationResult, ModelWinners } from '@/lib/types';
 import { 
   Download, 
   Brain, 
@@ -24,24 +24,26 @@ import { SimulationSummaryBadge } from './SimulationSummaryBadge';
 import { SimulationResultsTable } from './SimulationResultsTable';
 import { ModelAnalysisTab } from './ModelAnalysisTab';
 import { ReasoningTracesTab } from './ReasoningTracesTab';
+import { MarketoIntegration } from './MarketoIntegration';
 
 interface SimulationResultsProps {
   results: SimulationResult[];
+  modelWinners: ModelWinners;
   onSelectWinner: (result: SimulationResult) => void;
+  contentVariants?: Array<{ id: string; name: string; content: string; }>;
 }
 
 export const SimulationResults: React.FC<SimulationResultsProps> = ({
   results,
-  onSelectWinner
+  modelWinners,
+  onSelectWinner,
+  contentVariants = []
 }) => {
-  const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'analysis' | 'reasoning'>('overview');
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   
   const handleSelectWinner = (result: SimulationResult) => {
-    setSelectedWinner(result.id);
     onSelectWinner(result);
-    toast.success("Winner selected!");
   };
   
   const handleFlagResult = (result: SimulationResult) => {
@@ -127,6 +129,11 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
               </CardDescription>
             </div>
             <div className="flex gap-2">
+              <MarketoIntegration 
+                results={results}
+                modelWinners={modelWinners}
+                contentVariants={contentVariants}
+              />
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -182,7 +189,7 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
           {activeTab === 'overview' && (
             <SimulationResultsTable
               results={results}
-              selectedWinner={selectedWinner}
+              modelWinners={modelWinners}
               expandedRows={expandedRows}
               onToggleRowExpansion={toggleRowExpansion}
               onSelectWinner={handleSelectWinner}
@@ -197,7 +204,7 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
           {activeTab === 'reasoning' && (
             <ReasoningTracesTab 
               results={results} 
-              selectedWinner={selectedWinner} 
+              modelWinners={modelWinners}
             />
           )}
         </CardContent>

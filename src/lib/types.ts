@@ -1,3 +1,4 @@
+
 export type ModelType = 'chatgpt' | 'gemini' | 'perplexity';
 
 export type VisibilityStatus = 'high' | 'medium' | 'low' | 'absent';
@@ -78,4 +79,8 @@ export interface DiscoveryQuery {
   topic: string;
   persona: string;
   funnelStage: string;
+}
+
+export interface ModelWinners {
+  [model: string]: string | null;
 }

@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ContentVariant, QueryResult, SimulationResult } from '@/lib/types';
+import { ContentVariant, QueryResult, SimulationResult, ModelWinners } from '@/lib/types';
 import { dummySimulationResults } from '@/lib/dummy-data';
 import { toast } from 'sonner';
 import { useDiscoveryQueries } from './promptlab/useDiscoveryQueries';
@@ -29,6 +28,7 @@ export const usePromptLabState = () => {
   const [selectedModels, setSelectedModels] = useState<string[]>(['chatgpt', 'gemini', 'perplexity']);
   const [simulationResults, setSimulationResults] = useState<SimulationResult[]>([]);
   const [simulationComplete, setSimulationComplete] = useState(false);
+  const [modelWinners, setModelWinners] = useState<ModelWinners>({});
 
   const { discoveryQueries } = useDiscoveryQueries();
   const { 
@@ -122,8 +122,11 @@ export const usePromptLabState = () => {
   };
 
   const handleSelectWinner = (result: SimulationResult) => {
-    console.log("Selected winner:", result);
-    toast.success("Winner selected!");
+    setModelWinners(prev => ({
+      ...prev,
+      [result.model]: result.id
+    }));
+    toast.success(`Winner selected for ${result.model.charAt(0).toUpperCase() + result.model.slice(1)}`);
   };
 
   return {
@@ -143,6 +146,7 @@ export const usePromptLabState = () => {
     simulationResults,
     isLoading,
     simulationComplete,
+    modelWinners,
     discoveryQueries,
     contentVariants,
     selectedVariants,

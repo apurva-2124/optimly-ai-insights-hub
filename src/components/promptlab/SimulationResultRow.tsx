@@ -6,7 +6,6 @@ import {
   Collapsible,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { TableCell, TableRow } from "@/components/ui/table";
 import { SimulationResult } from '@/lib/types';
 import { 
   Flag, 
@@ -14,6 +13,7 @@ import {
   Clock, 
   ChevronDown,
   ChevronUp,
+  Crown,
 } from 'lucide-react';
 
 interface SimulationResultRowProps {
@@ -23,6 +23,7 @@ interface SimulationResultRowProps {
   onToggleExpansion: () => void;
   onSelectWinner: () => void;
   onFlagResult: () => void;
+  showModelBadge?: boolean;
 }
 
 export const SimulationResultRow: React.FC<SimulationResultRowProps> = ({
@@ -31,7 +32,8 @@ export const SimulationResultRow: React.FC<SimulationResultRowProps> = ({
   isSelected,
   onToggleExpansion,
   onSelectWinner,
-  onFlagResult
+  onFlagResult,
+  showModelBadge = true
 }) => {
   const getVariantScore = (result: SimulationResult) => {
     if (result.isControl) return 65;
@@ -99,58 +101,62 @@ export const SimulationResultRow: React.FC<SimulationResultRowProps> = ({
 
   return (
     <>
-      <TableRow className={result.isControl ? "bg-muted/30" : ""}>
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <span>
-              {result.isControl ? "Control" : `Variant ${result.variantId.replace('v', '')}`}
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onToggleExpansion}
-              className="h-6 w-6 p-0"
-            >
-              {isExpanded ? 
-                <ChevronUp className="h-3 w-3" /> : 
-                <ChevronDown className="h-3 w-3" />
-              }
-            </Button>
+      <div className={`p-4 ${result.isControl ? "bg-muted/30" : ""} ${isSelected ? "bg-amber-50 border-l-4 border-l-amber-500" : ""}`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">
+                {result.isControl ? "Control" : `Variant ${result.variantId.replace('v', '')}`}
+              </span>
+              {isSelected && (
+                <Crown className="h-4 w-4 text-amber-500" />
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onToggleExpansion}
+                className="h-6 w-6 p-0"
+              >
+                {isExpanded ? 
+                  <ChevronUp className="h-3 w-3" /> : 
+                  <ChevronDown className="h-3 w-3" />
+                }
+              </Button>
+            </div>
+            
+            {showModelBadge && (
+              <Badge className={getModelBadge(result.model)}>
+                {result.model.charAt(0).toUpperCase() + result.model.slice(1)}
+              </Badge>
+            )}
+            
+            <div className="flex items-center gap-3">
+              {result.brandCited ? (
+                <span className="text-green-600 font-medium">Brand Cited</span>
+              ) : (
+                <span className="text-red-600 font-medium">Not Cited</span>
+              )}
+              
+              <Badge className={getPositionBadge(getBrandMentionPosition(result))}>
+                {getBrandMentionPosition(result)}
+              </Badge>
+              
+              <span className={`confidence-badge ${getConfidenceBadge(result.confidenceScore)}`}>
+                {formatScore(result.confidenceScore)}
+              </span>
+              
+              <span className={getSentimentColor(result.sentiment)}>
+                {result.sentiment.charAt(0).toUpperCase() + result.sentiment.slice(1)}
+              </span>
+            </div>
           </div>
-        </TableCell>
-        <TableCell>
-          <Badge className={getModelBadge(result.model)}>
-            {result.model.charAt(0).toUpperCase() + result.model.slice(1)}
-          </Badge>
-        </TableCell>
-        <TableCell>
-          {result.brandCited ? (
-            <span className="text-green-600 font-medium">Yes</span>
-          ) : (
-            <span className="text-red-600 font-medium">No</span>
-          )}
-        </TableCell>
-        <TableCell>
-          <Badge className={getPositionBadge(getBrandMentionPosition(result))}>
-            {getBrandMentionPosition(result)}
-          </Badge>
-        </TableCell>
-        <TableCell>
-          <span className={`confidence-badge ${getConfidenceBadge(result.confidenceScore)}`}>
-            {formatScore(result.confidenceScore)}
-          </span>
-        </TableCell>
-        <TableCell>
-          <span className={getSentimentColor(result.sentiment)}>
-            {result.sentiment.charAt(0).toUpperCase() + result.sentiment.slice(1)}
-          </span>
-        </TableCell>
-        <TableCell className="text-sm text-muted-foreground">
-          <Clock className="h-3 w-3 inline mr-1" />
-          {new Date(result.timestamp).toLocaleTimeString()}
-        </TableCell>
-        <TableCell className="text-right">
-          <div className="flex justify-end space-x-2">
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              {new Date(result.timestamp).toLocaleTimeString()}
+            </span>
+            
             <Button
               variant="ghost"
               size="sm"
@@ -158,39 +164,35 @@ export const SimulationResultRow: React.FC<SimulationResultRowProps> = ({
             >
               <Flag className="h-4 w-4" />
             </Button>
+            
             <Button
               variant={isSelected ? "default" : "outline"}
               size="sm"
               onClick={onSelectWinner}
               disabled={isSelected}
+              className="min-w-[100px]"
             >
               {isSelected ? (
                 <>
                   <Check className="h-4 w-4 mr-1" />
-                  Selected
+                  Winner
                 </>
-              ) : "Choose Winner"}
+              ) : "Select Winner"}
             </Button>
           </div>
-        </TableCell>
-      </TableRow>
-      
-      <TableRow className={`${result.isControl ? "bg-muted/30" : ""} ${!isExpanded ? "hidden" : ""}`}>
-        <TableCell colSpan={8} className="p-0">
-          <Collapsible open={isExpanded}>
-            <CollapsibleContent>
-              <div className="p-4 bg-muted/20 border-t">
-                <div className="text-sm">
-                  <h4 className="font-medium mb-2 text-muted-foreground">Reasoning Trace Preview</h4>
-                  <p className="text-sm leading-relaxed">
-                    {getReasoningTrace(result)}
-                  </p>
-                </div>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </TableCell>
-      </TableRow>
+        </div>
+        
+        <Collapsible open={isExpanded}>
+          <CollapsibleContent>
+            <div className="mt-4 p-4 bg-muted/20 rounded-md">
+              <h4 className="font-medium mb-2 text-muted-foreground">Reasoning Trace</h4>
+              <p className="text-sm leading-relaxed">
+                {getReasoningTrace(result)}
+              </p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
     </>
   );
 };
