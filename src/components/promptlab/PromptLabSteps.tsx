@@ -9,7 +9,7 @@ import { ContentMatchStep } from '@/components/promptlab/ContentMatchStep';
 import { ContentVariantSelection } from '@/components/promptlab/ContentVariantSelection';
 import { EnhancedModelSelection } from '@/components/promptlab/EnhancedModelSelection';
 import { SimulationResults } from '@/components/promptlab/SimulationResults';
-import { IntentData, MatchResult, DiscoveryQuery, SimulationResult, ContentVariant } from '@/lib/types';
+import { IntentData, MatchResult, DiscoveryQuery, SimulationResult, ContentVariant, ModelWinners } from '@/lib/types';
 
 interface PromptLabStepsProps {
   currentStep: number;
@@ -34,6 +34,7 @@ interface PromptLabStepsProps {
   simulationComplete: boolean;
   contentVariants: ContentVariant[];
   selectedVariants: string[];
+  modelWinners: ModelWinners;
   onQuerySelect: (selectedQuery: string) => void;
   onDetectIntent: () => void;
   onSimulateLLM: () => void;
@@ -70,6 +71,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
   simulationComplete,
   contentVariants,
   selectedVariants,
+  modelWinners,
   onQuerySelect,
   onDetectIntent,
   onSimulateLLM,
@@ -167,8 +169,10 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
 
         {simulationComplete && !isLoading && (
           <SimulationResults 
-            results={simulationResults} 
+            results={simulationResults}
+            modelWinners={modelWinners}
             onSelectWinner={onSelectWinner}
+            contentVariants={contentVariants}
           />
         )}
       </div>

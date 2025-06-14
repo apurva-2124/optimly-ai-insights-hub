@@ -26,6 +26,7 @@ const PromptLab = () => {
     simulationResults,
     isLoading,
     simulationComplete,
+    modelWinners,
     discoveryQueries,
     contentVariants,
     selectedVariants,
@@ -88,6 +89,7 @@ const PromptLab = () => {
             simulationComplete={simulationComplete}
             contentVariants={contentVariants}
             selectedVariants={selectedVariants}
+            modelWinners={modelWinners}
             onQuerySelect={handleQuerySelect}
             onDetectIntent={handleDetectIntent}
             onSimulateLLM={handleSimulateLLM}
