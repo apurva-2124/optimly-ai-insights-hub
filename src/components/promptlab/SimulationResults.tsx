@@ -8,7 +8,7 @@ import {
 import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { SimulationResult, ModelWinners } from '@/lib/types';
+import { SimulationResult, ModelWinners, ContentVariant } from '@/lib/types';
 import { SimulationSummaryBadge } from './SimulationSummaryBadge';
 import { SimulationResultsTable } from './SimulationResultsTable';
 import { ModelAnalysisTab } from './ModelAnalysisTab';
