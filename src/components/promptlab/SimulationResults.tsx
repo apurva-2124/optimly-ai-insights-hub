@@ -21,7 +21,7 @@ interface SimulationResultsProps {
   results: SimulationResult[];
   modelWinners: ModelWinners;
   onSelectWinner: (result: SimulationResult) => void;
-  contentVariants?: Array<{ id: string; name: string; content: string; }>;
+  contentVariants?: ContentVariant[];
 }
 
 export const SimulationResults: React.FC<SimulationResultsProps> = ({
@@ -50,7 +50,21 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
     }
     setExpandedRows(newExpanded);
   };
-  
+
+  // Ensure contentVariants is of the correct shape for ContentVariant[]
+  // If any elements are missing required properties, add defaults (for demo/fallback)
+  const safeContentVariants: ContentVariant[] = contentVariants.map(variant => ({
+    id: variant.id,
+    name: variant.name,
+    content: variant.content,
+    format: (variant as any).format ?? "",
+    topic: (variant as any).topic ?? "",
+    persona: (variant as any).persona ?? "",
+    query: (variant as any).query ?? "",
+    funnelStage: (variant as any).funnelStage ?? "",
+    ...(variant.isControl !== undefined ? { isControl: variant.isControl } : {}),
+  }));
+
   return (
     <TooltipProvider>
       <Card>
@@ -58,7 +72,7 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
           <SimulationResultsHeader
             results={results}
             modelWinners={modelWinners}
-            contentVariants={contentVariants}
+            contentVariants={safeContentVariants}
           />
           
           <SimulationSummaryBadge results={results} />
