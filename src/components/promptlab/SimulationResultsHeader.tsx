@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { 
   Download, 
   FileText,
+  Trophy,
 } from 'lucide-react';
 import { toast } from "sonner";
-import { MarketoIntegration } from './MarketoIntegration';
+// Removed MarketoIntegration import
 import { SimulationResult, ModelWinners } from '@/lib/types';
 
 interface SimulationResultsHeaderProps {
@@ -43,7 +44,6 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
       if (result.isControl) {
         return "Control variant provided basic brand information but lacked specific value propositions and third-party validation that would drive higher visibility in AI responses.";
       }
-      
       const getVariantScore = (result: SimulationResult) => {
         if (result.isControl) return 65;
         if (result.brandCited && result.confidenceScore > 0.8) return 92;
@@ -51,7 +51,6 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
         if (result.brandCited) return 64;
         return 34;
       };
-      
       const score = getVariantScore(result);
       if (score > 85) {
         return "Variant scored highly due to clear value proposition, specific product details, third-party certifications, and Q&A structure that directly addresses user intent.";
@@ -77,6 +76,53 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
     toast.success("Slide summary generated");
   };
 
+  // DEMO: Find the top winner and preview content
+  const getDemoWinningVariant = () => {
+    // Assume the "winner" is the variant with the highest avg confidence score from modelWinners
+    const winnerIds = Object.values(modelWinners || {});
+    let topResult: SimulationResult | undefined;
+    let topScore = -1;
+
+    results.forEach(result => {
+      if (winnerIds.includes(result.id) && result.confidenceScore > topScore) {
+        topScore = result.confidenceScore;
+        topResult = result;
+      }
+    });
+
+    if (!topResult) return null;
+    const winningVariant = contentVariants.find(v => v.id === topResult?.variantId);
+    return (winningVariant && topResult)
+      ? {
+          name: winningVariant.name,
+          format: winningVariant.format || "Variant",
+          score: Math.round(topResult.confidenceScore * 100),
+          content: winningVariant.content
+        }
+      : null;
+  };
+
+  const handleDemoExport = () => {
+    const demoWinner = getDemoWinningVariant();
+    if (demoWinner) {
+      toast.success(
+        <div>
+          <div className="flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-yellow-500" /> 
+            Exported Winner: <strong>{demoWinner.name}</strong>
+          </div>
+          <div className="text-xs mt-1 text-muted-foreground">
+            Format: {demoWinner.format} &mdash; Score: {demoWinner.score}%
+          </div>
+          <hr className="my-2" />
+          <div className="text-xs max-h-16 overflow-y-auto">{demoWinner.content.slice(0, 120)}...</div>
+        </div>
+      );
+    } else {
+      toast.error("No winner selected. Please select a winner for demo export.");
+    }
+  };
+
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -86,11 +132,15 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
         </p>
       </div>
       <div className="flex gap-2">
-        <MarketoIntegration 
-          results={results}
-          modelWinners={modelWinners}
-          contentVariants={contentVariants}
-        />
+        <Button 
+          variant="default"
+          size="sm"
+          className="flex items-center gap-2"
+          onClick={handleDemoExport}
+        >
+          <Trophy className="h-4 w-4 text-yellow-500" />
+          Export Winners (Demo)
+        </Button>
         <Button 
           variant="outline" 
           size="sm" 
@@ -113,3 +163,4 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
     </div>
   );
 };
+
