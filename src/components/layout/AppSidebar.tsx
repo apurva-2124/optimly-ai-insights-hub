@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { OptimlyLogo } from '@/components/branding/OptimlyLogo';
 
 const navigation = [
   {
@@ -39,8 +40,9 @@ export function AppSidebar() {
     <Sidebar className="w-60">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-semibold px-4 py-3">
-            Optimly
+          <SidebarGroupLabel className="flex items-center space-x-2 text-lg font-semibold px-4 py-3">
+            <OptimlyLogo size="sm" />
+            <span className="font-noto">Optimly</span>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -53,10 +55,10 @@ export function AppSidebar() {
                       <Link
                         to={item.href}
                         className={cn(
-                          'flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors',
+                          'flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors font-noto',
                           isActive
-                            ? 'bg-primary/10 text-primary border-r-2 border-primary'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                            ? 'bg-optimly-teal-50 text-optimly-teal-700 border-r-2 border-optimly-teal'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-optimly-teal-25'
                         )}
                       >
                         <Icon className="h-5 w-5" />
