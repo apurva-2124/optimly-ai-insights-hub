@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,13 +31,41 @@ export const MarketoIntegration: React.FC<MarketoIntegrationProps> = ({
   const [isShipping, setIsShipping] = useState(false);
 
   const getWinnerContent = () => {
+    console.log('=== MarketoIntegration Debug ===');
+    console.log('modelWinners:', modelWinners);
+    console.log('results:', results);
+    console.log('contentVariants:', contentVariants);
+    
     const winners = [];
     
     Object.entries(modelWinners).forEach(([model, winnerId]) => {
+      console.log(`Processing ${model} with winnerId: ${winnerId}`);
+      
       if (winnerId) {
         const result = results.find(r => r.id === winnerId);
+        console.log(`Found result for ${winnerId}:`, result);
+        
         if (result) {
-          const variant = contentVariants.find(v => v.id === result.variantId);
+          // First try to find the variant by variantId
+          let variant = contentVariants.find(v => v.id === result.variantId);
+          console.log(`Found variant by variantId ${result.variantId}:`, variant);
+          
+          // If no variant found, try to match by result ID directly
+          if (!variant) {
+            variant = contentVariants.find(v => v.id === winnerId);
+            console.log(`Found variant by winnerId ${winnerId}:`, variant);
+          }
+          
+          // If still no variant, create a fallback from the result data
+          if (!variant && result.snippet) {
+            variant = {
+              id: winnerId,
+              name: `${model} Winner`,
+              content: result.snippet
+            };
+            console.log('Created fallback variant:', variant);
+          }
+          
           if (variant) {
             winners.push({
               model,
@@ -51,6 +78,7 @@ export const MarketoIntegration: React.FC<MarketoIntegrationProps> = ({
       }
     });
     
+    console.log('Final winners array:', winners);
     return winners;
   };
 
