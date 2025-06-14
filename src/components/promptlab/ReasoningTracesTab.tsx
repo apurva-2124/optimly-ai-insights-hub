@@ -1,15 +1,15 @@
 
 import React from 'react';
 import { Badge } from "@/components/ui/badge";
-import { SimulationResult } from '@/lib/types';
+import { SimulationResult, ModelWinners } from '@/lib/types';
 import { Check } from 'lucide-react';
 
 interface ReasoningTracesTabProps {
   results: SimulationResult[];
-  selectedWinner: string | null;
+  modelWinners: ModelWinners;
 }
 
-export const ReasoningTracesTab: React.FC<ReasoningTracesTabProps> = ({ results, selectedWinner }) => {
+export const ReasoningTracesTab: React.FC<ReasoningTracesTabProps> = ({ results, modelWinners }) => {
   const getVariantScore = (result: SimulationResult) => {
     if (result.isControl) return 65;
     if (result.brandCited && result.confidenceScore > 0.8) return 92;
@@ -44,6 +44,10 @@ export const ReasoningTracesTab: React.FC<ReasoningTracesTabProps> = ({ results,
     return modelColors[model as keyof typeof modelColors] || "bg-gray-100 text-gray-800";
   };
 
+  const isWinner = (result: SimulationResult) => {
+    return modelWinners[result.model] === result.id;
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="font-medium mb-4">Reasoning Traces</h3>
@@ -75,11 +79,11 @@ export const ReasoningTracesTab: React.FC<ReasoningTracesTabProps> = ({ results,
             </p>
           </div>
           
-          {selectedWinner === result.id && (
+          {isWinner(result) && (
             <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded-md">
               <span className="text-green-800 text-sm font-medium flex items-center">
                 <Check className="h-4 w-4 mr-1" />
-                Selected as winning variant
+                Selected as winning variant for {result.model}
               </span>
             </div>
           )}

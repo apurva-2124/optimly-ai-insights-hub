@@ -87,7 +87,8 @@ export const SimulationResults: React.FC<SimulationResultsProps> = ({
           
           {activeTab === 'reasoning' && (
             <ReasoningTracesTab 
-              results={results} 
+              results={results}
+              modelWinners={modelWinners}
             />
           )}
         </CardContent>
