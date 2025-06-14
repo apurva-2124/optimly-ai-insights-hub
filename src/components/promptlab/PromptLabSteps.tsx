@@ -163,7 +163,8 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
               onContentChange={onContentChange}
               matchResult={matchResult}
               onScoreMatch={onScoreMatch}
-              onContinue={() => onSetCurrentStep(3)}
+              // Do NOT advance to step 3 yet - just stay on this step and let the user see the variants selection below
+              onContinue={()=>{}}
               isLoading={isLoading && currentStep === 2}
               query={query}
             />
@@ -178,6 +179,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
                 onUpdateVariant={onUpdateVariant}
                 onDeleteVariant={onDeleteVariant}
                 onToggleVariant={onToggleVariant}
+                // Only NOW, when user runs test, go to step 3
                 onContinue={() => onSetCurrentStep(3)}
                 isLoading={isLoading && currentStep === 2}
               />
