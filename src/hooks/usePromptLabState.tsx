@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ContentVariant, QueryResult, SimulationResult, ModelWinners } from '@/lib/types';
@@ -81,13 +82,7 @@ export const usePromptLabState = () => {
     setCurrentStep(1);
   };
 
-  const handleDetectIntent = () => {
-    setCurrentStep(1);
-  };
-
-  const handleSimulateLLM = () => {
-    setCurrentStep(1);
-  };
+  // --- Removed duplicate definitions of handleDetectIntent & handleSimulateLLM ---
 
   const handleGenerateOptimizedVariant = () => {
     toast.success("Generating optimized variant to improve brand visibility");
