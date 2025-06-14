@@ -46,12 +46,18 @@ export const MatchScoreIndicator: React.FC<MatchScoreIndicatorProps> = ({
     return "bg-red-500";
   };
 
-  // Mock breakdown scores for demonstration
+  // Helper function to generate realistic breakdown scores
+  const generateBreakdownScore = (baseScore: number, variance: number): number => {
+    const randomVariance = (Math.random() - 0.5) * variance;
+    return Math.min(100, Math.max(0, baseScore + randomVariance));
+  };
+
+  // Generate realistic breakdown scores based on the main score
   const breakdownScores = {
-    keywordRelevance: Math.max(0, score - 10 + Math.random() * 20),
-    topicAlignment: Math.max(0, score - 5 + Math.random() * 15),
-    intentMatching: Math.max(0, score - 15 + Math.random() * 25),
-    personaFit: Math.max(0, score - 8 + Math.random() * 18)
+    keywordRelevance: generateBreakdownScore(score, 15),
+    topicAlignment: generateBreakdownScore(score, 12),
+    intentMatching: generateBreakdownScore(score, 18),
+    personaFit: generateBreakdownScore(score, 10)
   };
 
   return (
