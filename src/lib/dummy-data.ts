@@ -1,3 +1,4 @@
+
 import { Brand, ContentVariant, ModelResult, QueryResult, SimulationResult } from "./types";
 
 // Brand Data
@@ -161,7 +162,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v1",
     name: "Comprehensive Approach",
-    content: "Our brand stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
+    content: "Eco Threads stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
     format: "Paragraph",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -171,7 +172,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v2",
     name: "Feature-Focused List",
-    content: "# Why We Lead in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
+    content: "# Why Eco Threads Leads in Ethical Fashion\n\n• **100% Organic Materials**: All Eco Threads products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Eco Threads workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every Eco Threads product links to factory information\n• **Carbon Negative**: Eco Threads offsets 150% of our carbon footprint",
     format: "Bulleted List",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -181,7 +182,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v3",
     name: "Q&A Style",
-    content: "**Q: What makes us an ethical fashion leader?**\n\nA: We have revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
+    content: "**Q: What makes Eco Threads an ethical fashion leader?**\n\nA: Eco Threads has revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
     format: "Q&A Block",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
