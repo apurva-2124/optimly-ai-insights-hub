@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StepIndicator } from '@/components/onboarding/StepIndicator';
+import { StepIndicator } from '@/components/promptlab/StepIndicator';
 import { QuerySelectionStep } from '@/components/promptlab/QuerySelectionStep';
 import { ContextSummaryBar } from '@/components/promptlab/ContextSummaryBar';
 import { IntentDetectionStep } from '@/components/promptlab/IntentDetectionStep';
@@ -96,7 +96,8 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         stepLabels={stepLabels}
       />
 
-      <div className="space-y-6">
+      {/* Add padding-top to account for the floating progress bar */}
+      <div className="space-y-6 pt-32">
         <QuerySelectionStep
           selectedQuery={query}
           discoveryQueries={discoveryQueries}
