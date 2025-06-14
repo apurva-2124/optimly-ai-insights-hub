@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { 
@@ -75,27 +76,26 @@ export const SimulationResultsHeader: React.FC<SimulationResultsHeaderProps> = (
     toast.success("Slide summary generated");
   };
 
-  // DEMO: Find the top winner and preview content
+  // Fixed: Find any selected winner instead of trying to find the "top" winner
   const getDemoWinningVariant = () => {
-    // Assume the "winner" is the variant with the highest avg confidence score from modelWinners
-    const winnerIds = Object.values(modelWinners || {});
-    let topResult: SimulationResult | undefined;
-    let topScore = -1;
-
-    results.forEach(result => {
-      if (winnerIds.includes(result.id) && result.confidenceScore > topScore) {
-        topScore = result.confidenceScore;
-        topResult = result;
-      }
-    });
-
-    if (!topResult) return null;
-    const winningVariant = contentVariants.find(v => v.id === topResult?.variantId);
-    return (winningVariant && topResult)
+    // Get all selected winner IDs from modelWinners
+    const selectedWinnerIds = Object.values(modelWinners || {}).filter(id => id !== null);
+    
+    // If no winners selected, return null
+    if (selectedWinnerIds.length === 0) return null;
+    
+    // Find the first selected winner result
+    const winnerResult = results.find(result => selectedWinnerIds.includes(result.id));
+    if (!winnerResult) return null;
+    
+    // Find the corresponding content variant
+    const winningVariant = contentVariants.find(v => v.id === winnerResult.variantId);
+    
+    return (winningVariant && winnerResult)
       ? {
           name: winningVariant.name,
           format: winningVariant.format || "Variant",
-          score: Math.round(topResult.confidenceScore * 100),
+          score: Math.round(winnerResult.confidenceScore * 100),
           content: winningVariant.content
         }
       : null;
