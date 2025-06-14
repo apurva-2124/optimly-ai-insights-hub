@@ -66,27 +66,6 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				},
-				optimly: {
-					navy: '#1A365D',
-					teal: {
-						50: '#F0FDFA',
-						100: '#CCFBF1', 
-						200: '#99F6E4',
-						300: '#5EEAD4',
-						400: '#2DD4BF',
-						500: '#14B8A6', // Main brand teal
-						600: '#0D9488',
-						700: '#0F766E',
-						800: '#115E59',
-						900: '#134E4A',
-						DEFAULT: '#14B8A6'
-					},
-					lightGray: '#F7FAFC',
-					accent: '#4FD1C5',
-					success: '#48BB78',
-					warning: '#F6AD55',
-					danger: '#F56565'
 				}
 			},
 			borderRadius: {

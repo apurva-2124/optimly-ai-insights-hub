@@ -57,8 +57,8 @@ export function AppSidebar() {
                         className={cn(
                           'flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors font-noto',
                           isActive
-                            ? 'bg-optimly-teal-50 text-optimly-teal-700 border-r-2 border-optimly-teal'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-optimly-teal-25'
+                            ? 'bg-accent text-accent-foreground border-r-2 border-primary'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                         )}
                       >
                         <Icon className="h-5 w-5" />

@@ -23,16 +23,16 @@ export const AppHeader: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" className="hover:bg-optimly-teal-50">
+          <Button variant="ghost" size="icon" className="hover:bg-accent">
             <HelpCircle className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-optimly-teal-50">
+          <Button variant="ghost" size="icon" className="hover:bg-accent">
             <Bell className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-optimly-teal-50">
+          <Button variant="ghost" size="icon" className="hover:bg-accent">
             <Settings className="h-5 w-5" />
           </Button>
-          <div className="h-8 w-8 rounded-full bg-optimly-teal flex items-center justify-center text-white font-medium">
+          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-medium">
             M
           </div>
         </div>
