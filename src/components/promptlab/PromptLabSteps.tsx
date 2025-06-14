@@ -97,60 +97,61 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         stepLabels={stepLabels}
       />
 
-      {/* Add padding-top to account for the floating progress bar */}
       <div className="space-y-8 pt-32">
-        
+
         {/* Step 1: Simulate AI Answers */}
-        <SimulatorSection
-          title="Simulate AI Answers"
-          description="See what LLMs say about your brand—before your customers do"
-          banner="Test your visibility across ChatGPT, Gemini, and Perplexity before customers search"
-        >
-          <QuerySelectionStep
-            selectedQuery={query}
-            discoveryQueries={discoveryQueries}
-            onQuerySelect={onQuerySelect}
-            onDetectIntent={onDetectIntent}
-            isLoading={isLoading && currentStep === 1}
-          />
-
-          {query && queryContext.topic && (
-            <ContextSummaryBar
-              query={query}
-              topic={queryContext.topic}
-              persona={queryContext.persona}
-              funnelStage={queryContext.funnelStage}
-              onEdit={onEditContext}
-            />
-          )}
-
-          {intentData && (
-            <IntentDetectionStep
-              intentData={intentData}
-              onEdit={() => onSetCurrentStep(1)}
-              onContinue={onSimulateLLM}
+        {currentStep === 1 && (
+          <SimulatorSection
+            title="Simulate AI Answers"
+            description="See what LLMs say about your brand—before your customers do"
+            banner="Test your visibility across ChatGPT, Gemini, and Perplexity before customers search"
+          >
+            <QuerySelectionStep
+              selectedQuery={query}
+              discoveryQueries={discoveryQueries}
+              onQuerySelect={onQuerySelect}
+              onDetectIntent={onDetectIntent}
               isLoading={isLoading && currentStep === 1}
             />
-          )}
 
-          {simulatedResponse && (
-            <EnhancedSimulationStep
-              simulatedResponse={simulatedResponse}
-              brandMentioned={brandMentioned}
-              matchScore={matchScore}
-              personaFit={personaFit}
-              onContinue={() => onSetCurrentStep(2)}
-              isLoading={isLoading && currentStep === 1}
-              query={query}
-              persona={queryContext.persona}
-              funnelStage={queryContext.funnelStage}
-              onGenerateOptimizedVariant={onGenerateOptimizedVariant}
-            />
-          )}
-        </SimulatorSection>
+            {query && queryContext.topic && (
+              <ContextSummaryBar
+                query={query}
+                topic={queryContext.topic}
+                persona={queryContext.persona}
+                funnelStage={queryContext.funnelStage}
+                onEdit={onEditContext}
+              />
+            )}
+
+            {intentData && (
+              <IntentDetectionStep
+                intentData={intentData}
+                onEdit={() => onSetCurrentStep(1)}
+                onContinue={onSimulateLLM}
+                isLoading={isLoading && currentStep === 1}
+              />
+            )}
+
+            {simulatedResponse && (
+              <EnhancedSimulationStep
+                simulatedResponse={simulatedResponse}
+                brandMentioned={brandMentioned}
+                matchScore={matchScore}
+                personaFit={personaFit}
+                onContinue={() => onSetCurrentStep(2)}
+                isLoading={isLoading && currentStep === 1}
+                query={query}
+                persona={queryContext.persona}
+                funnelStage={queryContext.funnelStage}
+                onGenerateOptimizedVariant={onGenerateOptimizedVariant}
+              />
+            )}
+          </SimulatorSection>
+        )}
 
         {/* Step 2: Generate Optimized Variants */}
-        {(currentStep >= 2 || simulatedResponse) && (
+        {currentStep === 2 && (
           <SimulatorSection
             title="Generate Optimized Variants"
             description="AI-tailored content, generated and tested in one place"
@@ -184,7 +185,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         )}
 
         {/* Step 3: Compare & Export Winners */}
-        {(currentStep >= 3 || contentVariants.length > 0) && (
+        {currentStep === 3 && (
           <SimulatorSection
             title="Compare & Export Winners"
             description="A/B test and ship content that performs best with AI search"

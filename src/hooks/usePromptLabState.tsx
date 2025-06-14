@@ -78,11 +78,20 @@ export const usePromptLabState = () => {
         funnelStage: matchingQuery.funnelStage
       });
     }
+    setCurrentStep(1);
+  };
+
+  const handleDetectIntent = () => {
+    setCurrentStep(1);
+  };
+
+  const handleSimulateLLM = () => {
+    setCurrentStep(1);
   };
 
   const handleGenerateOptimizedVariant = () => {
     toast.success("Generating optimized variant to improve brand visibility");
-    setCurrentStep(5); // Go to variant selection step
+    setCurrentStep(2);
   };
 
   const handleScoreMatch = async () => {
@@ -95,7 +104,7 @@ export const usePromptLabState = () => {
       "Moderate alignment with query intent. Content could benefit from more specific sustainability claims, third-party certifications, and transparency about manufacturing processes to better match user expectations.";
     
     setMatchResult({ score, explanation });
-    setCurrentStep(4);
+    setCurrentStep(2);
     toast.success("Content match scored");
   };
 
@@ -108,8 +117,8 @@ export const usePromptLabState = () => {
   };
 
   const handleRunSimulation = async () => {
-    setCurrentStep(6);
-    
+    setCurrentStep(3);
+    setSimulationComplete(false);
     setTimeout(() => {
       const results = dummySimulationResults.filter(
         r => selectedModels.includes(r.model)
