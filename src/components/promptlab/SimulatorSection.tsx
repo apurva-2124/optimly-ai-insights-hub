@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface SimulatorSectionProps {
-  stepNumber: number;
+  stepNumber?: number;
   title: string;
   description: string;
   banner?: string;
@@ -30,9 +30,11 @@ export const SimulatorSection: React.FC<SimulatorSectionProps> = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <span className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold">
-              {stepNumber}
-            </span>
+            {stepNumber && (
+              <span className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold">
+                {stepNumber}
+              </span>
+            )}
             {title}
           </CardTitle>
           <CardDescription className="text-base">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { StepIndicator } from '@/components/promptlab/StepIndicator';
 import { SimulatorSection } from '@/components/promptlab/SimulatorSection';
@@ -103,7 +102,6 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         
         {/* Step 1: Simulate AI Answers */}
         <SimulatorSection
-          stepNumber={1}
           title="Simulate AI Answers"
           description="See what LLMs say about your brand—before your customers do"
           banner="Test your visibility across ChatGPT, Gemini, and Perplexity before customers search"
@@ -154,7 +152,6 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         {/* Step 2: Generate Optimized Variants */}
         {(currentStep >= 2 || simulatedResponse) && (
           <SimulatorSection
-            stepNumber={2}
             title="Generate Optimized Variants"
             description="AI-tailored content, generated and tested in one place"
             banner="Upload your content or generate AI-optimized variants based on simulation insights"
@@ -189,7 +186,6 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
         {/* Step 3: Compare & Export Winners */}
         {(currentStep >= 3 || contentVariants.length > 0) && (
           <SimulatorSection
-            stepNumber={3}
             title="Compare & Export Winners"
             description="A/B test and ship content that performs best with AI search"
             banner="Run cross-model tests and export winning variants directly to your CMS"
