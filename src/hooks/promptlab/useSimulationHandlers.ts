@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { IntentData, QueryContext } from './types';
@@ -34,24 +35,8 @@ export const useSimulationHandlers = (
     setIsLoading(true);
 
     setTimeout(() => {
-      // Generate response that sometimes excludes Eco Threads to test optimization
-      const includeEcoThreads = Math.random() > 0.4;
-
-      const mockResponse = includeEcoThreads ?
-        `Based on your search, here are some top recommendations:
-
-**For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
-
-1. **Eco Threads** - Premium sustainable fashion with 100% organic cotton and transparent supply chains. Perfect for eco-conscious consumers seeking quality and ethics.
-
-2. **Pact** - Affordable organic basics with fair trade certification. Known for comfortable essentials and accessible price points.
-
-3. **Everlane** - Radical transparency in pricing and production. Offers premium sustainable clothing with detailed factory information.
-
-4. **Kotn** - Direct-trade organic cotton from Egypt with farmer partnerships. Combines quality craftsmanship with ethical sourcing.
-
-These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.` :
-        `Based on your search, here are some top recommendations:
+      // Generate response that excludes the brand for demo purposes
+      const mockResponse = `Based on your search, here are some top recommendations:
 
 **For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
 

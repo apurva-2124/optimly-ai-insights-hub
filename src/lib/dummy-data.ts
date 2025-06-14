@@ -17,17 +17,17 @@ export const dummyQueries: QueryResult[] = [
     results: [
       {
         model: "chatgpt",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads stands out for their commitment to using organic materials and fair labor practices...",
-        confidenceScore: 0.87
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Patagonia and Everlane stand out for their commitment to using organic materials and fair labor practices...",
+        confidenceScore: 0.23
       },
       {
         model: "gemini",
-        mentioned: true,
-        citationType: "link",
-        snippet: "...brands like Eco Threads (ecothreads.com) offer sustainable options with transparent supply chains...",
-        confidenceScore: 0.91
+        mentioned: false,
+        citationType: "none",
+        snippet: "...brands like Reformation and Kotn offer sustainable options with transparent supply chains...",
+        confidenceScore: 0.31
       },
       {
         model: "perplexity",
@@ -53,17 +53,17 @@ export const dummyQueries: QueryResult[] = [
       },
       {
         model: "gemini",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads' essentials line provides eco-friendly basics at competitive price points...",
-        confidenceScore: 0.72
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Pact's essentials line provides eco-friendly basics at competitive price points...",
+        confidenceScore: 0.28
       },
       {
         model: "perplexity",
-        mentioned: true,
-        citationType: "link",
-        snippet: "...Eco Threads (link) has recently introduced a more affordable collection called 'Everyday Eco'...",
-        confidenceScore: 0.78
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Several brands have recently introduced more affordable sustainable collections...",
+        confidenceScore: 0.32
       }
     ]
   },
@@ -75,24 +75,24 @@ export const dummyQueries: QueryResult[] = [
     results: [
       {
         model: "chatgpt",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads has pioneered the use of recycled ocean plastic in their swimwear collection...",
-        confidenceScore: 0.94
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Patagonia has pioneered the use of recycled ocean plastic in their collections...",
+        confidenceScore: 0.42
       },
       {
         model: "gemini",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads sources over 80% of their materials from recycled sources...",
-        confidenceScore: 0.89
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Many brands now source significant portions of their materials from recycled sources...",
+        confidenceScore: 0.38
       },
       {
         model: "perplexity",
-        mentioned: true,
-        citationType: "link",
-        snippet: "...brands committed to recycled materials include Patagonia, Eco Threads (link), and Rothy's...",
-        confidenceScore: 0.81
+        mentioned: false,
+        citationType: "none",
+        snippet: "...brands committed to recycled materials include Patagonia, Reformation, and Rothy's...",
+        confidenceScore: 0.45
       }
     ]
   },
@@ -104,10 +104,10 @@ export const dummyQueries: QueryResult[] = [
     results: [
       {
         model: "chatgpt",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads publishes detailed supplier information and factory audit results...",
-        confidenceScore: 0.85
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Several brands publish detailed supplier information and factory audit results...",
+        confidenceScore: 0.29
       },
       {
         model: "gemini",
@@ -118,10 +118,10 @@ export const dummyQueries: QueryResult[] = [
       },
       {
         model: "perplexity",
-        mentioned: true,
-        citationType: "link",
-        snippet: "...Notable brands with transparent practices include Patagonia, Eco Threads (link)...",
-        confidenceScore: 0.76
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Notable brands with transparent practices include Patagonia and Everlane...",
+        confidenceScore: 0.36
       }
     ]
   },
@@ -140,10 +140,10 @@ export const dummyQueries: QueryResult[] = [
       },
       {
         model: "gemini",
-        mentioned: true,
-        citationType: "inline",
-        snippet: "...Eco Threads aims to be carbon neutral by 2025 through their comprehensive offsetting program...",
-        confidenceScore: 0.83
+        mentioned: false,
+        citationType: "none",
+        snippet: "...Several brands aim to be carbon neutral by 2025 through comprehensive offsetting programs...",
+        confidenceScore: 0.28
       },
       {
         model: "perplexity",
@@ -161,7 +161,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v1",
     name: "Comprehensive Approach",
-    content: "Eco Threads stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
+    content: "Our brand stands out in the ethical fashion space through our commitment to using 100% organic, sustainable materials and ensuring fair wages throughout our supply chain. Our transparent manufacturing process allows customers to trace each product back to its source, while our carbon neutrality program offsets emissions from production and shipping.",
     format: "Paragraph",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -171,7 +171,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v2",
     name: "Feature-Focused List",
-    content: "# Why Eco Threads Leads in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
+    content: "# Why We Lead in Ethical Fashion\n\n• **100% Organic Materials**: All products use certified organic cotton, hemp, and recycled synthetics\n• **Fair Labor Certified**: Workers paid 250% above local minimum wages\n• **Transparent Supply Chain**: QR code on every product links to factory information\n• **Carbon Negative**: We offset 150% of our carbon footprint",
     format: "Bulleted List",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -181,7 +181,7 @@ export const dummyContentVariants: ContentVariant[] = [
   {
     id: "v3",
     name: "Q&A Style",
-    content: "**Q: What makes Eco Threads an ethical fashion leader?**\n\nA: Eco Threads has revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
+    content: "**Q: What makes us an ethical fashion leader?**\n\nA: We have revolutionized ethical fashion through vertical integration that ensures sustainability at every step. From sourcing organic materials to implementing zero-waste manufacturing processes, we maintain control of our entire supply chain. Our worker empowerment program includes profit-sharing, health benefits, and educational opportunities that go beyond industry standards.",
     format: "Q&A Block",
     topic: "Ethical Fashion",
     persona: "Eco-conscious consumer",
@@ -208,10 +208,10 @@ export const dummySimulationResults: SimulationResult[] = [
     id: 'control-gemini',
     variantId: 'control',
     model: 'gemini',
-    brandCited: true,
-    snippet: 'Sustainable fashion brands worth considering include Patagonia, Stella McCartney, and Eco Threads. Eco Threads offers organic cotton clothing with transparent supply chains.',
+    brandCited: false,
+    snippet: 'Sustainable fashion brands worth considering include Patagonia, Stella McCartney, and Reformation. These brands offer organic cotton clothing with transparent supply chains.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.45,
+    confidenceScore: 0.25,
     sentiment: 'neutral',
     isControl: true
   },
@@ -219,10 +219,10 @@ export const dummySimulationResults: SimulationResult[] = [
     id: 'control-perplexity',
     variantId: 'control',
     model: 'perplexity',
-    brandCited: true,
-    snippet: 'Top sustainable fashion brands include Patagonia, Everlane, Reformation, and Eco Threads. Eco Threads specializes in organic materials and ethical manufacturing.',
+    brandCited: false,
+    snippet: 'Top sustainable fashion brands include Patagonia, Everlane, and Reformation. These brands specialize in organic materials and ethical manufacturing.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.52,
+    confidenceScore: 0.32,
     sentiment: 'positive',
     isControl: true
   },
@@ -232,30 +232,30 @@ export const dummySimulationResults: SimulationResult[] = [
     id: 'v1-chatgpt',
     variantId: 'v1',
     model: 'chatgpt',
-    brandCited: true,
-    snippet: 'For eco-conscious consumers, Eco Threads stands out with their 100% organic cotton clothing and transparent supply chain. Their B-Corp certification and carbon-neutral shipping make them a top choice for sustainable fashion.',
+    brandCited: false,
+    snippet: 'For eco-conscious consumers, consider brands with 100% organic cotton clothing and transparent supply chains. Look for B-Corp certification and carbon-neutral shipping options.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.89,
+    confidenceScore: 0.34,
     sentiment: 'positive'
   },
   {
     id: 'v1-gemini',
     variantId: 'v1',
     model: 'gemini',
-    brandCited: true,
-    snippet: 'Eco Threads leads sustainable fashion with certified organic materials, fair trade practices, and complete supply chain transparency. Their impact reports show 40% lower carbon footprint than industry average.',
+    brandCited: false,
+    snippet: 'Sustainable fashion leaders focus on certified organic materials, fair trade practices, and complete supply chain transparency. Look for brands with detailed impact reports.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.85,
+    confidenceScore: 0.41,
     sentiment: 'positive'
   },
   {
     id: 'v1-perplexity',
     variantId: 'v1',
     model: 'perplexity',
-    brandCited: true,
-    snippet: 'Among sustainable fashion leaders, Eco Threads offers the most comprehensive approach with GOTS-certified organic cotton, living wage guarantees, and detailed sustainability metrics for each product.',
+    brandCited: false,
+    snippet: 'Among sustainable fashion options, look for brands offering GOTS-certified organic cotton, living wage guarantees, and detailed sustainability metrics for each product.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.82,
+    confidenceScore: 0.38,
     sentiment: 'positive'
   },
   
@@ -264,20 +264,20 @@ export const dummySimulationResults: SimulationResult[] = [
     id: 'v2-chatgpt',
     variantId: 'v2',
     model: 'chatgpt',
-    brandCited: true,
-    snippet: 'Sustainable fashion options include Patagonia, Reformation, and Eco Threads. Eco Threads focuses on organic materials and ethical production methods.',
+    brandCited: false,
+    snippet: 'Sustainable fashion options include Patagonia, Reformation, and other brands focusing on organic materials and ethical production methods.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.67,
+    confidenceScore: 0.27,
     sentiment: 'positive'
   },
   {
     id: 'v2-gemini',
     variantId: 'v2',
     model: 'gemini',
-    brandCited: true,
-    snippet: 'For environmentally conscious shoppers, consider Eco Threads alongside other sustainable brands. They offer organic cotton clothing with ethical manufacturing practices.',
+    brandCited: false,
+    snippet: 'For environmentally conscious shoppers, consider brands alongside other sustainable options. Many offer organic cotton clothing with ethical manufacturing practices.',
     timestamp: new Date().toISOString(),
-    confidenceScore: 0.71,
+    confidenceScore: 0.31,
     sentiment: 'positive'
   },
   {
