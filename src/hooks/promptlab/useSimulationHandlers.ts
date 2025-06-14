@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { IntentData, QueryContext } from './types';
@@ -15,19 +14,17 @@ export const useSimulationHandlers = (
 
   const handleDetectIntent = async () => {
     setIsLoading(true);
-    
     setTimeout(() => {
       const mockIntent = `Finding sustainable and ethical ${queryContext.persona.includes('brand') ? 'brands' : 'clothing'} that align with environmental values and transparent business practices`;
       const mockPersona = queryContext.persona || 'Eco-conscious consumer';
       const mockReasoning = `Based on the query and the ${queryContext.funnelStage} stage, this user is likely a ${mockPersona} looking for detailed comparisons and specific features around sustainable fashion.`;
-      
       setIntentData({
         intent: mockIntent,
         persona: mockPersona,
         reasoning: mockReasoning
       });
-      
-      setCurrentStep(2);
+      // Only advance to the next sub-step, not the next main step
+      // We'll let the outer component handle step changes
       setIsLoading(false);
       toast.success("Query context analyzed");
     }, 1500);
@@ -35,12 +32,12 @@ export const useSimulationHandlers = (
 
   const handleSimulateLLM = async () => {
     setIsLoading(true);
-    
+
     setTimeout(() => {
       // Generate response that sometimes excludes Eco Threads to test optimization
       const includeEcoThreads = Math.random() > 0.4;
-      
-      const mockResponse = includeEcoThreads ? 
+
+      const mockResponse = includeEcoThreads ?
         `Based on your search, here are some top recommendations:
 
 **For ${queryContext.persona} in the ${queryContext.funnelStage} stage:**
@@ -69,12 +66,12 @@ These brands offer the sustainable materials and ethical practices that ${queryC
 These brands offer the sustainable materials and ethical practices that ${queryContext.persona} typically values, especially during the ${queryContext.funnelStage} phase of shopping for eco-friendly clothing.`;
 
       setSimulatedResponse(mockResponse);
-      
+
       // Set a high match score to potentially trigger optimization
       const score = Math.floor(Math.random() * 30) + 75;
       setMatchScore(score);
       setPersonaFit(`This content meets ${85 + Math.floor(Math.random() * 10)}% of the ${queryContext.funnelStage}-stage needs for ${queryContext.persona}, with strong emphasis on sustainability and ethical practices.`);
-      setCurrentStep(3);
+      // -- DO NOT move to step 3 here --
       setIsLoading(false);
       toast.success("AI response simulated");
     }, 2000);

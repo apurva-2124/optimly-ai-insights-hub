@@ -139,6 +139,7 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
                 brandMentioned={brandMentioned}
                 matchScore={matchScore}
                 personaFit={personaFit}
+                // ADVANCE to step 2 now!
                 onContinue={() => onSetCurrentStep(2)}
                 isLoading={isLoading && currentStep === 1}
                 query={query}
