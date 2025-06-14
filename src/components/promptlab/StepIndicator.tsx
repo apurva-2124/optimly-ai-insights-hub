@@ -28,24 +28,24 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 <div className="flex flex-col items-center">
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border-2",
+                      "w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium border-2",
                       isCompleted && "bg-primary text-primary-foreground border-primary",
                       isCurrent && "bg-primary text-primary-foreground border-primary",
                       !isCompleted && !isCurrent && "bg-background text-muted-foreground border-muted-foreground"
                     )}
                   >
                     {isCompleted ? (
-                      <Check className="h-5 w-5" />
+                      <Check className="h-6 w-6" />
                     ) : (
                       stepNumber
                     )}
                   </div>
-                  <span className="text-xs mt-2 text-center max-w-[80px]">{label}</span>
+                  <span className="text-sm mt-3 text-center max-w-[120px] font-medium">{label}</span>
                 </div>
                 {index < totalSteps - 1 && (
                   <div
                     className={cn(
-                      "h-0.5 w-12 mx-2 mt-[-20px]",
+                      "h-0.5 w-16 mx-4 mt-[-24px]",
                       isCompleted ? "bg-primary" : "bg-muted"
                     )}
                   />
@@ -56,7 +56,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
         </div>
       </div>
       
-      {/* Mobile version - shows below header on mobile */}
+      {/* Mobile version */}
       <div className="md:hidden block">
         <div className="fixed top-16 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
           <div className="flex items-center justify-center py-4 overflow-x-auto">
@@ -83,12 +83,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                           stepNumber
                         )}
                       </div>
-                      <span className="text-xs mt-1 text-center max-w-[60px] truncate">{label}</span>
+                      <span className="text-xs mt-1 text-center max-w-[80px] truncate">{label}</span>
                     </div>
                     {index < totalSteps - 1 && (
                       <div
                         className={cn(
-                          "h-0.5 w-8 mx-1 mt-[-16px]",
+                          "h-0.5 w-8 mx-2 mt-[-16px]",
                           isCompleted ? "bg-primary" : "bg-muted"
                         )}
                       />

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { StepIndicator } from '@/components/promptlab/StepIndicator';
+import { SimulatorSection } from '@/components/promptlab/SimulatorSection';
 import { QuerySelectionStep } from '@/components/promptlab/QuerySelectionStep';
 import { ContextSummaryBar } from '@/components/promptlab/ContextSummaryBar';
 import { IntentDetectionStep } from '@/components/promptlab/IntentDetectionStep';
@@ -9,6 +10,7 @@ import { ContentMatchStep } from '@/components/promptlab/ContentMatchStep';
 import { ContentVariantSelection } from '@/components/promptlab/ContentVariantSelection';
 import { EnhancedModelSelection } from '@/components/promptlab/EnhancedModelSelection';
 import { SimulationResults } from '@/components/promptlab/SimulationResults';
+import { ExportWinnersSection } from '@/components/promptlab/ExportWinnersSection';
 import { IntentData, MatchResult, DiscoveryQuery, SimulationResult, ContentVariant, ModelWinners } from '@/lib/types';
 
 interface PromptLabStepsProps {
@@ -89,92 +91,136 @@ export const PromptLabSteps: React.FC<PromptLabStepsProps> = ({
   onGenerateOptimizedVariant
 }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StepIndicator 
         currentStep={currentStep}
-        totalSteps={6}
+        totalSteps={3}
         stepLabels={stepLabels}
       />
 
       {/* Add padding-top to account for the floating progress bar */}
-      <div className="space-y-6 pt-32">
-        <QuerySelectionStep
-          selectedQuery={query}
-          discoveryQueries={discoveryQueries}
-          onQuerySelect={onQuerySelect}
-          onDetectIntent={onDetectIntent}
-          isLoading={isLoading && currentStep === 1}
-        />
-
-        {query && queryContext.topic && (
-          <ContextSummaryBar
-            query={query}
-            topic={queryContext.topic}
-            persona={queryContext.persona}
-            funnelStage={queryContext.funnelStage}
-            onEdit={onEditContext}
+      <div className="space-y-8 pt-32">
+        
+        {/* Step 1: Simulate AI Answers */}
+        <SimulatorSection
+          stepNumber={1}
+          title="Simulate AI Answers"
+          description="See what LLMs say about your brand—before your customers do"
+          banner="Test your visibility across ChatGPT, Gemini, and Perplexity before customers search"
+        >
+          <QuerySelectionStep
+            selectedQuery={query}
+            discoveryQueries={discoveryQueries}
+            onQuerySelect={onQuerySelect}
+            onDetectIntent={onDetectIntent}
+            isLoading={isLoading && currentStep === 1}
           />
+
+          {query && queryContext.topic && (
+            <ContextSummaryBar
+              query={query}
+              topic={queryContext.topic}
+              persona={queryContext.persona}
+              funnelStage={queryContext.funnelStage}
+              onEdit={onEditContext}
+            />
+          )}
+
+          {intentData && (
+            <IntentDetectionStep
+              intentData={intentData}
+              onEdit={() => onSetCurrentStep(1)}
+              onContinue={onSimulateLLM}
+              isLoading={isLoading && currentStep === 1}
+            />
+          )}
+
+          {simulatedResponse && (
+            <EnhancedSimulationStep
+              simulatedResponse={simulatedResponse}
+              brandMentioned={brandMentioned}
+              matchScore={matchScore}
+              personaFit={personaFit}
+              onContinue={() => onSetCurrentStep(2)}
+              isLoading={isLoading && currentStep === 1}
+              query={query}
+              persona={queryContext.persona}
+              funnelStage={queryContext.funnelStage}
+              onGenerateOptimizedVariant={onGenerateOptimizedVariant}
+            />
+          )}
+        </SimulatorSection>
+
+        {/* Step 2: Generate Optimized Variants */}
+        {(currentStep >= 2 || simulatedResponse) && (
+          <SimulatorSection
+            stepNumber={2}
+            title="Generate Optimized Variants"
+            description="AI-tailored content, generated and tested in one place"
+            banner="Upload your content or generate AI-optimized variants based on simulation insights"
+          >
+            <ContentMatchStep
+              brandContent={brandContent}
+              onContentChange={onContentChange}
+              matchResult={matchResult}
+              onScoreMatch={onScoreMatch}
+              onContinue={() => onSetCurrentStep(3)}
+              isLoading={isLoading && currentStep === 2}
+              query={query}
+            />
+
+            {brandContent && (
+              <ContentVariantSelection
+                contentVariants={contentVariants}
+                selectedVariants={selectedVariants}
+                brandContent={brandContent}
+                queryContext={queryContext}
+                onAddVariant={onAddVariant}
+                onUpdateVariant={onUpdateVariant}
+                onDeleteVariant={onDeleteVariant}
+                onToggleVariant={onToggleVariant}
+                onContinue={() => onSetCurrentStep(3)}
+                isLoading={isLoading && currentStep === 2}
+              />
+            )}
+          </SimulatorSection>
         )}
 
-        <IntentDetectionStep
-          intentData={intentData}
-          onEdit={() => onSetCurrentStep(1)}
-          onContinue={onSimulateLLM}
-          isLoading={isLoading && currentStep === 2}
-        />
+        {/* Step 3: Compare & Export Winners */}
+        {(currentStep >= 3 || contentVariants.length > 0) && (
+          <SimulatorSection
+            stepNumber={3}
+            title="Compare & Export Winners"
+            description="A/B test and ship content that performs best with AI search"
+            banner="Run cross-model tests and export winning variants directly to your CMS"
+          >
+            <EnhancedModelSelection
+              selectedModels={selectedModels}
+              onModelToggle={onModelToggle}
+              onRunSimulation={onRunSimulation}
+              isLoading={isLoading && currentStep === 3}
+              persona={queryContext.persona}
+              funnelStage={queryContext.funnelStage}
+            />
 
-        <EnhancedSimulationStep
-          simulatedResponse={simulatedResponse}
-          brandMentioned={brandMentioned}
-          matchScore={matchScore}
-          personaFit={personaFit}
-          onContinue={() => onSetCurrentStep(4)}
-          isLoading={isLoading && currentStep === 3}
-          query={query}
-          persona={queryContext.persona}
-          funnelStage={queryContext.funnelStage}
-          onGenerateOptimizedVariant={onGenerateOptimizedVariant}
-        />
-
-        <ContentMatchStep
-          brandContent={brandContent}
-          onContentChange={onContentChange}
-          matchResult={matchResult}
-          onScoreMatch={onScoreMatch}
-          onContinue={() => onSetCurrentStep(5)}
-          isLoading={isLoading && currentStep === 4}
-          query={query}
-        />
-
-        <ContentVariantSelection
-          contentVariants={contentVariants}
-          selectedVariants={selectedVariants}
-          brandContent={brandContent}
-          queryContext={queryContext}
-          onAddVariant={onAddVariant}
-          onUpdateVariant={onUpdateVariant}
-          onDeleteVariant={onDeleteVariant}
-          onToggleVariant={onToggleVariant}
-          onContinue={() => onSetCurrentStep(6)}
-          isLoading={isLoading && currentStep === 5}
-        />
-
-        <EnhancedModelSelection
-          selectedModels={selectedModels}
-          onModelToggle={onModelToggle}
-          onRunSimulation={onRunSimulation}
-          isLoading={isLoading && currentStep === 6}
-          persona={queryContext.persona}
-          funnelStage={queryContext.funnelStage}
-        />
-
-        {simulationComplete && !isLoading && (
-          <SimulationResults 
-            results={simulationResults}
-            modelWinners={modelWinners}
-            onSelectWinner={onSelectWinner}
-            contentVariants={contentVariants}
-          />
+            {simulationComplete && !isLoading && (
+              <>
+                <SimulationResults 
+                  results={simulationResults}
+                  modelWinners={modelWinners}
+                  onSelectWinner={onSelectWinner}
+                  contentVariants={contentVariants}
+                />
+                
+                <ExportWinnersSection
+                  results={simulationResults}
+                  modelWinners={modelWinners}
+                  contentVariants={contentVariants}
+                  onSelectWinner={onSelectWinner}
+                />
+              </>
+            )}
+          </SimulatorSection>
         )}
       </div>
     </div>

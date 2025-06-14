@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MainDashboardLayout } from '@/components/layout/MainDashboardLayout';
@@ -45,12 +44,9 @@ const PromptLab = () => {
   } = usePromptLabState();
   
   const stepLabels = [
-    'Select Query',
-    'Detect Context',
-    'Simulate AI',
-    'Match Content',
-    'Select Variants',
-    'Run Visibility Test'
+    'Simulate AI Answers',
+    'Generate Optimized Variants', 
+    'Compare & Export Winners'
   ];
   
   const handleBackToIndex = () => {
